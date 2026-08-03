@@ -1,6 +1,5 @@
 package com.slc.mentoring.service;
 
-import com.slc.mentoring.dto.request.VotePostRequest;
 import com.slc.mentoring.dto.response.VoteGetResponse;
 import com.slc.mentoring.dto.response.VotePostResponse;
 import com.slc.mentoring.entity.Mentor;
