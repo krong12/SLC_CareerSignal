@@ -16,8 +16,14 @@ public class Mentor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mentorId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name; // 표시이름
+
+    @Column(nullable = false)
+    private String major; // 전공
+
+    @Column(nullable = false)
+    private String field; // 분야
 
     @Column(nullable = true)
     private String companyName; // 회사명
@@ -34,7 +40,7 @@ public class Mentor {
     private Area area; // 근무지역 : 1 = 수도권, 2 = 수도권외, 3 = 해외
 
     @Column(nullable = true)
-    private String foreignSchool; // 유학간 학교 이름, 유학 안갔으면 null
+    private boolean foreignSchool; // 유학 여부
 
     @Column(nullable = false)
     private boolean majorRelated; // 전공일치 여부
@@ -71,11 +77,13 @@ public class Mentor {
     private boolean remainRelease; // 잔여 인원 공개 여부
 
     @Builder
-    public Mentor(String name, String companyName, String job, CareerPath careerPath, Area area,
-                  String foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
+    public Mentor(String name, String major, String field, String companyName, String job, CareerPath careerPath, Area area,
+                  boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
                   String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
                   MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease) {
         this.name = name;
+        this.major = major;
+        this.field = field;
         this.companyName = companyName;
         this.job = job;
         this.careerPath = careerPath;
@@ -94,11 +102,13 @@ public class Mentor {
         this.remainRelease = remainRelease;
     }
 
-    public void update(String name, String companyName, String job, CareerPath careerPath, Area area,
-                       String foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
+    public void update(String name, String major, String field, String companyName, String job, CareerPath careerPath, Area area,
+                       boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
                        String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
                        MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease) {
         this.name = name;
+        this.major = major;
+        this. field = field;
         this.companyName = companyName;
         this.job = job;
         this.careerPath = careerPath;

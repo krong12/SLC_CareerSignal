@@ -30,7 +30,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    implementation 'io.minio:minio:8.5.9'
+    implementation 'io.minio:minio:8.5.9' // minio 사용
+
+    implementation 'org.apache.commons:commons-csv:1.10.0' // csv 파싱
 }
 
 tasks.named('test') {

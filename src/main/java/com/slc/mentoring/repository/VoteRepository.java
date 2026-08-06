@@ -12,4 +12,5 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     List<Vote> findAllByUser_UserId(Long userId);
     Vote findByUserAndMentor(User user, Mentor mentor);
     Long countByUserAndIsFinal(User user, boolean isFinal);
+    Long countByMentor_MentorIdAndIsFinal(Long mentorId, boolean isFinal);
 }

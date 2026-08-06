@@ -8,5 +8,5 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class MentorGetResponse {
-    private List<MentorPostResponse> mentor_list;
+    private List<MentorPostResponse> mentorList;
 }

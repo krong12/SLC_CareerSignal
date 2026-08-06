@@ -47,4 +47,18 @@ public class VoteController {
         voteService.DeleteVote(userInfo.getUserId(), votePostRequest.getMentorId());
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/vote/mentor/{mentorId}")
+    public ResponseEntity<Long> getMentorVoteCount(@PathVariable Long mentorId) {
+        Long count = voteService.getMentorVoteCount(mentorId);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/vote/remain")
+    public ResponseEntity<Long> getRemainingVoteCount(
+            @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
+        if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
+        Long remainCount = voteService.getRemainVoteCount(userInfo.getUserId());
+        return ResponseEntity.ok(remainCount);
+    }
 }

@@ -9,6 +9,7 @@ import com.slc.mentoring.service.MentorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class MentorController {
     }
 
     @PostMapping("/admin/mentor")
-    public ResponseEntity<MentorPostResponse> createMentor(MentorPostRequest mentorPostRequest) {
+    public ResponseEntity<MentorPostResponse> createMentor(@RequestBody MentorPostRequest mentorPostRequest) {
         MentorPostResponse mentorPostResponse = mentorService.createMentor(mentorPostRequest);
         return ResponseEntity.ok(mentorPostResponse);
     }
@@ -40,8 +41,14 @@ public class MentorController {
     }
 
     @PatchMapping("/admin/mentor/{mentorId}")
-    public ResponseEntity<MentorPostResponse> updateMentor(@PathVariable Long mentorId, MentorPostRequest mentorPostRequest) {
+    public ResponseEntity<MentorPostResponse> updateMentor(@PathVariable Long mentorId, @RequestBody MentorPostRequest mentorPostRequest) {
         MentorPostResponse mentorPostResponse = mentorService.updateMentor(mentorId, mentorPostRequest);
         return ResponseEntity.ok(mentorPostResponse);
+    }
+
+    @PostMapping("/admin/mentor/batch")
+    public ResponseEntity<Void> createMentorsByCSV(@RequestParam("file") MultipartFile file) {
+        mentorService.createMentorsByCSV(file);
+        return ResponseEntity.ok().build();
     }
 }

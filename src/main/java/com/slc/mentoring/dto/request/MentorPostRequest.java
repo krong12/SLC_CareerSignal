@@ -10,11 +10,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MentorPostRequest {
     private String name;
+    private String major;
+    private String field;
     private String companyName;
     private String job;
     private CareerPath careerPath;
     private Area area;
-    private String foreignSchool;
+    private boolean foreignSchool;
     private boolean majorRelated;
     private Long graduatedYear;
     private String introduce;

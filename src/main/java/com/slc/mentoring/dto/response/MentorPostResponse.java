@@ -12,11 +12,13 @@ import lombok.Getter;
 public class MentorPostResponse {
     private Long mentorId;
     private String name;
+    private String major;
+    private String field;
     private String companyName;
     private String job;
     private CareerPath careerPath;
     private Area area;
-    private String foreignSchool;
+    private boolean foreignSchool;
     private boolean majorRelated;
     private Long graduatedYear;
     private String introduce;
@@ -32,11 +34,13 @@ public class MentorPostResponse {
     public MentorPostResponse(Mentor mentor) {
         this.mentorId = mentor.getMentorId();
         this.name = mentor.getName();
+        this.major = mentor.getMajor();
+        this.field = mentor.getField();
         this.companyName = mentor.getCompanyName();
         this.job = mentor.getJob();
         this.careerPath = mentor.getCareerPath();
         this.area = mentor.getArea();
-        this.foreignSchool = mentor.getForeignSchool();
+        this.foreignSchool = mentor.isForeignSchool();
         this.majorRelated = mentor.isMajorRelated();
         this.graduatedYear = mentor.getGraduateYear();
         this.introduce = mentor.getIntroduce();

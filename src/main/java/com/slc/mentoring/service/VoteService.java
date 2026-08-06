@@ -86,4 +86,14 @@ public class VoteService {
         }
         return;
     }
+
+    public Long getMentorVoteCount(Long mentorId) {
+        return voteRepository.countByMentor_MentorIdAndIsFinal(mentorId, true);
+    }
+
+    public Long getRemainVoteCount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
+        return 3 - voteRepository.countByUserAndIsFinal(user, true);
+    }
 }
