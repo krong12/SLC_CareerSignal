@@ -40,11 +40,11 @@ public class VoteController {
         return ResponseEntity.ok(votePostResponse);
     }
 
-    @DeleteMapping("/vote")
-    public ResponseEntity<Void> DeleteVote(@RequestBody VotePostRequest votePostRequest,
+    @DeleteMapping("/vote/{mentorId}")
+    public ResponseEntity<Void> DeleteVote(@PathVariable Long mentorId,
                                            @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
         if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
-        voteService.DeleteVote(userInfo.getUserId(), votePostRequest.getMentorId());
+        voteService.DeleteVote(userInfo.getUserId(), mentorId);
         return ResponseEntity.noContent().build();
     }
 

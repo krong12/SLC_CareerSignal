@@ -37,8 +37,14 @@ public class VoteService {
         Mentor mentor = mentorRepository.findById(mentorId) // 유효한 멘토인지 확인
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_MENTOR_ID));
 
+        // 투표를 3개 넘게 했는지 확인 필요
+        Long count = voteRepository.countByUser_UserIdAndIsFinal(user.getUserId(), true);
+        if(count >= 3) {
+            throw new CustomException(ExceptionCode.TOO_MANY_VOTE);
+        }
+
         if(voteRepository.existsByUserAndMentor(user, mentor)) {
-            Vote tmp = voteRepository.findByUserAndMentor(user, mentor);
+            Vote tmp = voteRepository.findByUser_UserIdAndMentor_MentorId(userId, mentorId);
             if(!tmp.isFinal()) { // 이미 찜했으면 확정으로 변경
                 tmp.update_vote();
                 return new VotePostResponse(new Vote(user, mentor, true));
@@ -48,15 +54,9 @@ public class VoteService {
             }
         }
 
-        // 투표를 3개 넘게 했는지 확인 필요
-        Long count = voteRepository.countByUserAndIsFinal(user, true);
-        if(count >= 3) {
-            throw new CustomException(ExceptionCode.TOO_MANY_VOTE);
-        }
-
         Vote vote = new Vote(user, mentor, true);
-        voteRepository.save(vote);
-        return new VotePostResponse(vote);
+        Vote savedVote = voteRepository.save(vote);
+        return new VotePostResponse(savedVote);
     }
 
     public VotePostResponse CreateFavorite(Long userId, Long mentorId) {
@@ -81,8 +81,8 @@ public class VoteService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_MENTOR_ID));
 
         if(voteRepository.existsByUserAndMentor(user, mentor)) {
-            Long voteId = voteRepository.findByUserAndMentor(user, mentor).getVoteId();
-            voteRepository.deleteById(voteId);
+            Vote vote = voteRepository.findByUser_UserIdAndMentor_MentorId(userId, mentorId);
+            voteRepository.deleteById(vote.getVoteId());
         }
         return;
     }
@@ -94,6 +94,6 @@ public class VoteService {
     public Long getRemainVoteCount(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
-        return 3 - voteRepository.countByUserAndIsFinal(user, true);
+        return 3 - voteRepository.countByUser_UserIdAndIsFinal(user.getUserId(), true);
     }
 }

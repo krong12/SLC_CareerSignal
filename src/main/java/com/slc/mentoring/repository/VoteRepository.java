@@ -10,7 +10,7 @@ import java.util.List;
 public interface VoteRepository extends JpaRepository<Vote, Long> {
     boolean existsByUserAndMentor(User user, Mentor mentor); // 특정 유저가 이미 같은 멘토를 투표한 적 있는지 확인
     List<Vote> findAllByUser_UserId(Long userId);
-    Vote findByUserAndMentor(User user, Mentor mentor);
-    Long countByUserAndIsFinal(User user, boolean isFinal);
+    Vote findByUser_UserIdAndMentor_MentorId(Long userId, Long mentorId);
+    Long countByUser_UserIdAndIsFinal(Long userId, boolean isFinal);
     Long countByMentor_MentorIdAndIsFinal(Long mentorId, boolean isFinal);
 }
