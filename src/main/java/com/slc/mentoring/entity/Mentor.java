@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -20,10 +23,19 @@ public class Mentor {
     private String name; // 표시이름
 
     @Column(nullable = false)
-    private String major; // 전공
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "mentor_major",
+            joinColumns = @JoinColumn(name = "mentor_id"),
+            inverseJoinColumns = @JoinColumn(name = "major_id")
+    )
+    private List<Major> major = new ArrayList<>(); // 전공
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "mentor_field", joinColumns = @JoinColumn(name = "mentor_id"))
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String field; // 분야
+    private List<Field> field = new ArrayList<>(); // 분야
 
     @Column(nullable = true)
     private String companyName; // 회사명
@@ -35,11 +47,14 @@ public class Mentor {
     @Column(nullable = false)
     private CareerPath careerPath; // 진로단계 : 1 = 학사취업, 2 = 석사취업, 3 = 박사취업, 4 = 기타
 
+    @Column(nullable = false)
+    private String areaName;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Area area; // 근무지역 : 1 = 수도권, 2 = 수도권외, 3 = 해외
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private boolean foreignSchool; // 유학 여부
 
     @Column(nullable = false)
@@ -77,7 +92,7 @@ public class Mentor {
     private boolean remainRelease; // 잔여 인원 공개 여부
 
     @Builder
-    public Mentor(String name, String major, String field, String companyName, String job, CareerPath careerPath, Area area,
+    public Mentor(String name, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
                   boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
                   String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
                   MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease) {
@@ -87,6 +102,7 @@ public class Mentor {
         this.companyName = companyName;
         this.job = job;
         this.careerPath = careerPath;
+        this.areaName = areaName;
         this.area = area;
         this.foreignSchool = foreignSchool;
         this.majorRelated = majorRelated;
@@ -102,16 +118,18 @@ public class Mentor {
         this.remainRelease = remainRelease;
     }
 
-    public void update(String name, String major, String field, String companyName, String job, CareerPath careerPath, Area area,
+    public void update(String name, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
                        boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
                        String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
                        MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease) {
         this.name = name;
-        this.major = major;
-        this. field = field;
+        this.major.clear();
+        if(major != null) { this.major.addAll(major); }
+        this.field = field;
         this.companyName = companyName;
         this.job = job;
         this.careerPath = careerPath;
+        this.areaName = areaName;
         this.area = area;
         this.foreignSchool = foreignSchool;
         this.majorRelated = majorRelated;

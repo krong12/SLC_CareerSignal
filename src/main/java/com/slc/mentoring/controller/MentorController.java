@@ -21,7 +21,7 @@ public class MentorController {
         MentorGetResponse mentorGetResponse = mentorService.showMentors();
         return ResponseEntity.ok(mentorGetResponse);
     }
-    // 필터링에 따라 멘토 필터링해주는 기능 ## 필터링 요소에 관해 추가 논의 필요
+
     @GetMapping("/mentorSearch")
     public ResponseEntity<MentorSearchResponse> searchMentors(MentorSearchRequest mentorSearchRequest) {
         MentorSearchResponse mentorSearchResponse = mentorService.searchMentors(mentorSearchRequest);

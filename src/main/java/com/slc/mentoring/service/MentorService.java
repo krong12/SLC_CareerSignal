@@ -5,12 +5,10 @@ import com.slc.mentoring.dto.request.MentorSearchRequest;
 import com.slc.mentoring.dto.response.MentorGetResponse;
 import com.slc.mentoring.dto.response.MentorPostResponse;
 import com.slc.mentoring.dto.response.MentorSearchResponse;
-import com.slc.mentoring.entity.Area;
-import com.slc.mentoring.entity.CareerPath;
-import com.slc.mentoring.entity.Mentor;
-import com.slc.mentoring.entity.MentorStatus;
+import com.slc.mentoring.entity.*;
 import com.slc.mentoring.global.error.CustomException;
 import com.slc.mentoring.global.error.ExceptionCode;
+import com.slc.mentoring.repository.MajorRepository;
 import com.slc.mentoring.repository.MentorRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
@@ -23,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -30,6 +29,7 @@ import java.util.List;
 @Transactional
 public class MentorService {
     private final MentorRepository mentorRepository;
+    private final MajorRepository majorRepository;
 
     public MentorGetResponse showMentors() {
         List<Mentor> mentors = mentorRepository.findAll();
@@ -40,13 +40,26 @@ public class MentorService {
     }
 
     public MentorPostResponse createMentor(MentorPostRequest mentorPostRequest) {
+        List<Major> majors = new ArrayList<>();
+        for(String majorName : mentorPostRequest.getMajor()) {
+            Major major = majorRepository.findByName(majorName)
+                    .orElseGet(() -> {
+                        Major newMajor = Major.builder()
+                                .name(majorName)
+                                .build();
+                        return majorRepository.save(newMajor);
+                    });
+            majors.add(major);
+        }
+
         Mentor mentor = Mentor.builder()
                 .name(mentorPostRequest.getName())
-                .major(mentorPostRequest.getMajor())
+                .major(majors)
                 .field(mentorPostRequest.getField())
                 .companyName(mentorPostRequest.getCompanyName())
                 .job(mentorPostRequest.getJob())
                 .careerPath(mentorPostRequest.getCareerPath())
+                .areaName(mentorPostRequest.getAreaName())
                 .area(mentorPostRequest.getArea())
                 .foreignSchool(mentorPostRequest.isForeignSchool())
                 .majorRelated(mentorPostRequest.isMajorRelated())
@@ -61,6 +74,7 @@ public class MentorService {
                 .limitRelease(mentorPostRequest.isLimitRelease())
                 .remainRelease(mentorPostRequest.isRemainRelease())
                 .build();
+
         Mentor savedMentor = mentorRepository.save(mentor);
         return new MentorPostResponse(savedMentor);
     }
@@ -72,13 +86,26 @@ public class MentorService {
     public MentorPostResponse updateMentor(Long mentorId, MentorPostRequest mentorPostRequest) {
         Mentor mentor = mentorRepository.findById(mentorId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_MENTOR_ID));
+
+        List<Major> majors = new ArrayList<>();
+        for(String majorName : mentorPostRequest.getMajor()) {
+            Major major = majorRepository.findByName(majorName)
+                    .orElseGet(() -> {
+                        Major newMajor = Major.builder()
+                                .name(majorName)
+                                .build();
+                        return majorRepository.save(newMajor);
+                    });
+            majors.add(major);
+        }
         mentor.update(
                 mentorPostRequest.getName(),
-                mentorPostRequest.getMajor(),
+                majors,
                 mentorPostRequest.getField(),
                 mentorPostRequest.getCompanyName(),
                 mentorPostRequest.getJob(),
                 mentorPostRequest.getCareerPath(),
+                mentorPostRequest.getAreaName(),
                 mentorPostRequest.getArea(),
                 mentorPostRequest.isForeignSchool(),
                 mentorPostRequest.isMajorRelated(),
@@ -98,19 +125,38 @@ public class MentorService {
 
     public MentorSearchResponse searchMentors(MentorSearchRequest mentorSearchRequest) {
         List<MentorPostResponse> searchedMentors =  mentorRepository.findAll().stream()
-                .filter(mentor -> mentorSearchRequest.getCareerPath() == null ||
-                        mentor.getCareerPath() == mentorSearchRequest.getCareerPath())
-                .filter(mentor -> mentorSearchRequest.getArea() == null ||
-                        mentor.getArea() == mentorSearchRequest.getArea())
                 .filter(mentor -> {
-                    Boolean req = mentorSearchRequest.getForeignSchool();
-                    if(req == null) return true;
-                    return req.equals(mentor.isForeignSchool());
+                    List<String> reqMajors = mentorSearchRequest.getMajorNames();
+                    if(reqMajors != null && !reqMajors.isEmpty()) {
+                        boolean match = mentor.getMajor().stream()
+                                .anyMatch(major -> reqMajors.contains(major.getName()));
+                        if(!match) return false;
+                    }
+
+                    List<Field> reqFields = mentorSearchRequest.getFields();
+                    if(reqFields != null && !reqFields.isEmpty()) {
+                        boolean match = mentor.getField().stream()
+                                .anyMatch(reqFields::contains);
+                        if(!match) return false;
+                    }
+
+                    List<CareerPath> reqCareerPaths = mentorSearchRequest.getCareerPaths();
+                    if(reqCareerPaths != null && !reqCareerPaths.isEmpty())
+                        if(!reqCareerPaths.contains(mentor.getCareerPath()))
+                            return false;
+
+                    List<Boolean> reqForeignSchools = mentorSearchRequest.getForeignSchools();
+                    if(reqForeignSchools != null && !reqForeignSchools.isEmpty())
+                        if(!reqForeignSchools.contains(mentor.isForeignSchool()))
+                            return false;
+
+                    List<Boolean> reqMajorRelated = mentorSearchRequest.getMajorRelated();
+                    if(reqMajorRelated != null && !reqMajorRelated.isEmpty())
+                        if(!reqMajorRelated.contains(mentor.isMajorRelated()))
+                            return false;
+
+                    return true;
                 })
-                .filter(mentor -> mentorSearchRequest.getMajorRelated() == null ||
-                        mentorSearchRequest.getMajorRelated().equals(mentor.isMajorRelated()))
-                .filter(mentor -> mentorSearchRequest.getGraduateYear() == null ||
-                        mentorSearchRequest.getGraduateYear().equals(mentor.getGraduateYear()))
                 .map(MentorPostResponse::new)
                 .toList();
         return new MentorSearchResponse(searchedMentors);
@@ -120,6 +166,9 @@ public class MentorService {
         if(file.isEmpty()) {
             throw new IllegalArgumentException("업로드한 파일이 비었습니다.");
         }
+
+        java.util.Map<String, Major> majorCache = new java.util.HashMap<>();
+
         List<MentorPostRequest> mentorPostRequests = new ArrayList<>();
         try(BufferedReader fileReader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
             CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
@@ -137,6 +186,12 @@ public class MentorService {
                 CareerPath careerPath = CareerPath.fromDescription(record.get("careerPath"));
                 Area area = Area.fromDescription(record.get("area"));
 
+                List<Field> fields = Field.fromDescriptionList(record.get("field"));
+                List<String> majorNames = Arrays.stream(record.get("major").split("/"))
+                        .map(String::trim)
+                        .filter(s -> !s.isBlank())
+                        .toList();
+
                 String foreignSchoolStr = record.get("foreignSchool").trim();
                 boolean foreignSchool = foreignSchoolStr.equals("있음");
 
@@ -148,11 +203,12 @@ public class MentorService {
 
                 MentorPostRequest request = new MentorPostRequest(
                         record.get("name"),
-                        record.get("major"),
-                        record.get("field"),
+                        majorNames,
+                        fields,
                         record.get("companyName"),
                         record.get("job"),
                         careerPath,
+                        record.get("area"),
                         area,
                         foreignSchool,
                         majorRelated,
@@ -171,10 +227,54 @@ public class MentorService {
             }
 
             for(MentorPostRequest request : mentorPostRequests) {
-                createMentor(request);
+                createMentorWithCache(request, majorCache);
             }
         } catch (Exception e) {
             throw new RuntimeException("CSV 파일 파싱중 오류 발생 : " + e.getMessage(), e);
         }
+    }
+
+    private MentorPostResponse createMentorWithCache(MentorPostRequest mentorPostRequest,
+                                                     java.util.Map<String, Major> majorCache) {
+        List<Major> majors = new ArrayList<>();
+        for(String majorName : mentorPostRequest.getMajor()) {
+            Major major = majorCache.get(majorName);
+            if(major == null) {
+                major = majorRepository.findByName(majorName)
+                        .orElseGet(() -> {
+                            Major newMajor = Major.builder()
+                                    .name(majorName)
+                                    .build();
+                            return majorRepository.save(newMajor);
+                        });
+                majorCache.put(majorName, major);
+            }
+            majors.add(major);
+        }
+        Mentor mentor = Mentor.builder()
+                .name(mentorPostRequest.getName())
+                .major(majors)
+                .field(mentorPostRequest.getField())
+                .companyName(mentorPostRequest.getCompanyName())
+                .job(mentorPostRequest.getJob())
+                .careerPath(mentorPostRequest.getCareerPath())
+                .areaName(mentorPostRequest.getAreaName())
+                .area(mentorPostRequest.getArea())
+                .foreignSchool(mentorPostRequest.isForeignSchool())
+                .majorRelated(mentorPostRequest.isMajorRelated())
+                .graduateYear(mentorPostRequest.getGraduatedYear())
+                .introduce(mentorPostRequest.getIntroduce())
+                .linkedin(mentorPostRequest.getLinkedin())
+                .profileImagePath(mentorPostRequest.getProfileImagePath())
+                .profileRelease(mentorPostRequest.isProfileRelease())
+                .voteRelease(mentorPostRequest.isVoteRelease())
+                .mentorStatus(mentorPostRequest.getMentorStatus())
+                .mentorLimit(mentorPostRequest.getMentorLimit())
+                .limitRelease(mentorPostRequest.isLimitRelease())
+                .remainRelease(mentorPostRequest.isRemainRelease())
+                .build();
+
+        Mentor savedMentor = mentorRepository.save(mentor);
+        return new MentorPostResponse(savedMentor);
     }
 }

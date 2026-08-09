@@ -1,22 +1,22 @@
 package com.slc.mentoring.dto.response;
 
-import com.slc.mentoring.entity.Area;
-import com.slc.mentoring.entity.CareerPath;
-import com.slc.mentoring.entity.Mentor;
-import com.slc.mentoring.entity.MentorStatus;
+import com.slc.mentoring.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
 public class MentorPostResponse {
     private Long mentorId;
     private String name;
-    private String major;
-    private String field;
+    private List<Major> major;
+    private List<Field> field;
     private String companyName;
     private String job;
     private CareerPath careerPath;
+    private String areaName;
     private Area area;
     private boolean foreignSchool;
     private boolean majorRelated;
@@ -39,6 +39,7 @@ public class MentorPostResponse {
         this.companyName = mentor.getCompanyName();
         this.job = mentor.getJob();
         this.careerPath = mentor.getCareerPath();
+        this.areaName = mentor.getAreaName();
         this.area = mentor.getArea();
         this.foreignSchool = mentor.isForeignSchool();
         this.majorRelated = mentor.isMajorRelated();
