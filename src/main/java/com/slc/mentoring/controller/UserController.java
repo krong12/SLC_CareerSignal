@@ -18,9 +18,7 @@ public class UserController {
 
     @GetMapping("/admin/check")
     public ResponseEntity<Boolean> amIadmin(@SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
-        if(userInfo == null) return ResponseEntity.ok((false));
-        if(userInfo.getUserId() == 1) return ResponseEntity.ok(true);
-        else return ResponseEntity.ok(false);
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping("/admin/user")
