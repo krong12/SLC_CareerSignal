@@ -18,4 +18,10 @@ public class Major {
     public Major(String name) {
         this.name = name;
     }
+
+    // 테스트코드용
+    public Major(Long majorId, String name) {
+        this.majorId = majorId;
+        this.name = name;
+    }
 }

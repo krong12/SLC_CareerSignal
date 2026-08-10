@@ -1,11 +1,13 @@
 package com.slc.mentoring.dto.response;
 
 import com.slc.mentoring.entity.Vote;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class VotePostResponse {
     private Long voteId;
     private Long mentorId;
