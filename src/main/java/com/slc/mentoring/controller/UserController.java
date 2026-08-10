@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,6 +56,12 @@ public class UserController {
         if(session != null) {
             session.invalidate();
         }
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/admin/user/batch")
+    public ResponseEntity<Void> createUserByCSV(@RequestParam("file") MultipartFile file) {
+        userService.createUserByCSV(file);
         return ResponseEntity.ok().build();
     }
 }

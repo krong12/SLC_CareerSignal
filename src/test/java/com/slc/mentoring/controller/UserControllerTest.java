@@ -1,5 +1,6 @@
 package com.slc.mentoring.controller;
 
+import org.springframework.mock.web.MockMultipartFile;
 import tools.jackson.databind.ObjectMapper;
 import com.slc.mentoring.dto.request.UserPostRequest;
 import com.slc.mentoring.dto.response.UserGetResponse;
@@ -21,8 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -143,5 +143,25 @@ public class UserControllerTest {
                         .session(session))
                 .andExpect(status().isOk())
                 .andDo(document("user/logout"));
+    }
+
+    @Test
+    @DisplayName("CSV로 유저 일괄 등록")
+    void createUsersByCSV() throws Exception {
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "users.csv",
+                "text/csv",
+                "csv,data,sample".getBytes()
+        );
+        mockMvc.perform(multipart("/admin/user/batch")
+                        .file(file)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("user/create-users-byCSV",
+                        requestParts(
+                                partWithName("file").description("업로드할 유저 데이터가 담긴 CSV 파일")
+                        )
+                ));
     }
 }
