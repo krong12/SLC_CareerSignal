@@ -51,7 +51,7 @@ public class Mentor {
     private String areaName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Area area; // 근무지역 : 1 = 수도권, 2 = 수도권외, 3 = 해외
 
     @Column(nullable = false)
