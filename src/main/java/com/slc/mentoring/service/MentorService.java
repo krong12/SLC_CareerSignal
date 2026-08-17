@@ -129,7 +129,12 @@ public class MentorService {
     }
 
     public MentorSearchResponse searchMentors(MentorSearchRequest mentorSearchRequest) {
-        List<MentorPostResponse> searchedMentors =  mentorRepository.findAll().stream()
+        List<Mentor> mentors =  mentorRepository.findAll();
+        mentors.forEach(mentor -> {
+            mentor.getMajor().size();
+            mentor.getField().size();
+        });
+        List<MentorPostResponse> searchedMentors = mentors.stream()
                 .filter(mentor -> {
                     List<String> reqMajors = mentorSearchRequest.getMajorNames();
                     if(reqMajors != null && !reqMajors.isEmpty()) {
