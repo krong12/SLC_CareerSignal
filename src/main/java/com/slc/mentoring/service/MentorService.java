@@ -33,6 +33,11 @@ public class MentorService {
 
     public MentorGetResponse showMentors() {
         List<Mentor> mentors = mentorRepository.findAll();
+
+        mentors.forEach(mentor -> {
+            mentor.getMajor().size();
+            mentor.getField().size();
+        });
         List<MentorPostResponse> mentorList = mentors.stream()
                 .map(MentorPostResponse::new)
                 .toList();
