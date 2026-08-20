@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class VoteGetResponse {
-    private List<Vote> votes;
+    private List<VotePostResponse> votes;
 }
