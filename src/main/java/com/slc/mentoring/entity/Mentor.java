@@ -20,7 +20,10 @@ public class Mentor {
     private Long mentorId;
 
     @Column(nullable = false)
-    private String name; // 표시이름
+    private String name; // 이름
+
+    @Column(nullable = false)
+    private String alias; // 표시 이름
 
     @Column(nullable = false)
     @ManyToMany(fetch = FetchType.LAZY)
@@ -91,12 +94,16 @@ public class Mentor {
     @Column(nullable = false)
     private boolean remainRelease; // 잔여 인원 공개 여부
 
+    @Column(nullable = true)
+    private String oneLine;
+
     @Builder
-    public Mentor(String name, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
+    public Mentor(String name, String alias, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
                   boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
                   String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
-                  MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease) {
+                  MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease, String oneLine) {
         this.name = name;
+        this.alias = alias;
         this.major = major;
         this.field = field;
         this.companyName = companyName;
@@ -116,13 +123,15 @@ public class Mentor {
         this.mentorLimit = mentorLimit;
         this.limitRelease = limitRelease;
         this.remainRelease = remainRelease;
+        this.oneLine = oneLine;
     }
 
-    public void update(String name, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
+    public void update(String name, String alias, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
                        boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
                        String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
-                       MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease) {
+                       MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease, String oneLine) {
         this.name = name;
+        this.alias = alias;
         this.major.clear();
         if(major != null) { this.major.addAll(major); }
         this.field = field;
@@ -143,5 +152,6 @@ public class Mentor {
         this.mentorLimit = mentorLimit;
         this.limitRelease = limitRelease;
         this.remainRelease = remainRelease;
+        this.oneLine = oneLine;
     }
 }

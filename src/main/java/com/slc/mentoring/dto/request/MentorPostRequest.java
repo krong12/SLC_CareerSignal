@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MentorPostRequest {
     private String name;
+    private String alias;
     private List<String> major;
     private List<Field> field;
     private String companyName;
@@ -29,4 +30,5 @@ public class MentorPostRequest {
     private Long mentorLimit;
     private boolean limitRelease;
     private boolean remainRelease;
+    private String oneLine;
 }

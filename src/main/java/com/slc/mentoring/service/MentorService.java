@@ -59,6 +59,7 @@ public class MentorService {
 
         Mentor mentor = Mentor.builder()
                 .name(mentorPostRequest.getName())
+                .alias(mentorPostRequest.getAlias())
                 .major(majors)
                 .field(mentorPostRequest.getField())
                 .companyName(mentorPostRequest.getCompanyName())
@@ -78,6 +79,7 @@ public class MentorService {
                 .mentorLimit(mentorPostRequest.getMentorLimit())
                 .limitRelease(mentorPostRequest.isLimitRelease())
                 .remainRelease(mentorPostRequest.isRemainRelease())
+                .oneLine(mentorPostRequest.getOneLine())
                 .build();
 
         Mentor savedMentor = mentorRepository.save(mentor);
@@ -105,6 +107,7 @@ public class MentorService {
         }
         mentor.update(
                 mentorPostRequest.getName(),
+                mentorPostRequest.getAlias(),
                 majors,
                 mentorPostRequest.getField(),
                 mentorPostRequest.getCompanyName(),
@@ -123,7 +126,8 @@ public class MentorService {
                 mentorPostRequest.getMentorStatus(),
                 mentorPostRequest.getMentorLimit(),
                 mentorPostRequest.isLimitRelease(),
-                mentorPostRequest.isRemainRelease()
+                mentorPostRequest.isRemainRelease(),
+                mentorPostRequest.getOneLine()
         );
         return new MentorPostResponse(mentor);
     }
@@ -213,6 +217,7 @@ public class MentorService {
 
                 MentorPostRequest request = new MentorPostRequest(
                         record.get("name"),
+                        record.get("alias"),
                         majorNames,
                         fields,
                         record.get("companyName"),
@@ -231,7 +236,8 @@ public class MentorService {
                         MentorStatus.CONTACTING,
                         5L,
                         false,
-                        false
+                        false,
+                        record.get("oneLine")
                 );
                 mentorPostRequests.add(request);
             }
@@ -263,6 +269,7 @@ public class MentorService {
         }
         Mentor mentor = Mentor.builder()
                 .name(mentorPostRequest.getName())
+                .alias(mentorPostRequest.getAlias())
                 .major(majors)
                 .field(mentorPostRequest.getField())
                 .companyName(mentorPostRequest.getCompanyName())
@@ -282,6 +289,7 @@ public class MentorService {
                 .mentorLimit(mentorPostRequest.getMentorLimit())
                 .limitRelease(mentorPostRequest.isLimitRelease())
                 .remainRelease(mentorPostRequest.isRemainRelease())
+                .oneLine(mentorPostRequest.getOneLine())
                 .build();
 
         Mentor savedMentor = mentorRepository.save(mentor);

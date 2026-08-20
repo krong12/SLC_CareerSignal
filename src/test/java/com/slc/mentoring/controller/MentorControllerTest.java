@@ -4,14 +4,17 @@ import com.slc.mentoring.dto.request.MentorPostRequest;
 import com.slc.mentoring.dto.response.MentorGetResponse;
 import com.slc.mentoring.dto.response.MentorPostResponse;
 import com.slc.mentoring.dto.response.MentorSearchResponse;
+import com.slc.mentoring.dto.response.UserPostResponse;
 import com.slc.mentoring.entity.*;
 import com.slc.mentoring.service.MentorService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.restdocs.test.autoconfigure.AutoConfigureRestDocs;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,6 +43,15 @@ public class MentorControllerTest {
     @MockitoBean
     private MentorService mentorService;
 
+    private MockHttpSession adminSession;
+
+    @BeforeEach
+    void setup() {
+        adminSession = new MockHttpSession();
+        UserPostResponse loginUser = new UserPostResponse(1L, "admin");
+        adminSession.setAttribute("LOGIN_USER", loginUser);
+    }
+
     @Test
     @DisplayName("멘토 전체 조회")
     void showMentors() throws Exception {
@@ -47,6 +59,7 @@ public class MentorControllerTest {
         MentorPostResponse dummyMentor = new MentorPostResponse(
                 1L,
                 "홍길동",
+                "냉철한 경제학과",
                 List.of(dummyMajor),
                 List.of(Field.SW),
                 "삼성전자",
@@ -65,7 +78,8 @@ public class MentorControllerTest {
                 MentorStatus.CONTACTING,
                 5L,
                 true,
-                true
+                true,
+                "모두들 건승하십시오."
         );
         MentorGetResponse mockResponse = new MentorGetResponse(List.of(dummyMentor));
         given(mentorService.showMentors()).willReturn(mockResponse);
@@ -78,6 +92,7 @@ public class MentorControllerTest {
                                 fieldWithPath("mentorList").description("멘토 정보 리스트"),
                                 fieldWithPath("mentorList[].mentorId").description("멘토 고유 ID"),
                                 fieldWithPath("mentorList[].name").description("멘토 이름"),
+                                fieldWithPath("mentorList[].alias").description("멘토 표시 이름"),
 
                                 fieldWithPath("mentorList[].major").description("전공 목록"),
                                 fieldWithPath("mentorList[].major[].majorId").description("전공 고유 ID"),
@@ -100,7 +115,8 @@ public class MentorControllerTest {
                                 fieldWithPath("mentorList[].mentorStatus").description("멘토 상태"),
                                 fieldWithPath("mentorList[].mentorLimit").description("멘토 제한 인원"),
                                 fieldWithPath("mentorList[].limitRelease").description("제한 공개 여부"),
-                                fieldWithPath("mentorList[].remainRelease").description("잔여 인원 공개 여부")
+                                fieldWithPath("mentorList[].remainRelease").description("잔여 인원 공개 여부"),
+                                fieldWithPath("mentorList[].oneLine").description("멘토의 한마디")
                         )
                 ));
     }
@@ -112,6 +128,7 @@ public class MentorControllerTest {
         MentorPostResponse dummyMentor = new MentorPostResponse(
                 1L,
                 "홍길동",
+                "냉철한 경제학과",
                 List.of(dummyMajor),
                 List.of(Field.SW),
                 "삼성전자",
@@ -130,7 +147,8 @@ public class MentorControllerTest {
                 MentorStatus.CONTACTING,
                 5L,
                 true,
-                true
+                true,
+                "모두들 건승하십시오."
         );
         MentorSearchResponse mockResponse = new MentorSearchResponse(List.of(dummyMentor));
         given(mentorService.searchMentors(any())).willReturn(mockResponse);
@@ -155,6 +173,7 @@ public class MentorControllerTest {
                                 fieldWithPath("searchedMentors").description("검색된 멘토 정보 리스트"),
                                 fieldWithPath("searchedMentors[].mentorId").description("멘토 고유 ID"),
                                 fieldWithPath("searchedMentors[].name").description("멘토 이름"),
+                                fieldWithPath("searchedMentors[].alias").description("멘토 표시 이름"),
                                 fieldWithPath("searchedMentors[].major").description("전공 목록"),
                                 fieldWithPath("searchedMentors[].major[].majorId").description("전공 고유 ID"),
                                 fieldWithPath("searchedMentors[].major[].name").description("전공 이름"),
@@ -175,7 +194,8 @@ public class MentorControllerTest {
                                 fieldWithPath("searchedMentors[].mentorStatus").description("멘토 상태"),
                                 fieldWithPath("searchedMentors[].mentorLimit").description("멘토 제한 인원"),
                                 fieldWithPath("searchedMentors[].limitRelease").description("제한 공개 여부"),
-                                fieldWithPath("searchedMentors[].remainRelease").description("잔여 인원 공개 여부")
+                                fieldWithPath("searchedMentors[].remainRelease").description("잔여 인원 공개 여부"),
+                                fieldWithPath("searchedMentors[].oneLine").description("멘토의 한마디")
                         )
                 ));
 
@@ -187,6 +207,7 @@ public class MentorControllerTest {
         Major dummyMajor = new Major(1L, "경영학과");
         MentorPostRequest request = new MentorPostRequest(
                 "홍길동",
+                "냉철한 경제학과",
                 List.of("컴퓨터공학과"),
                 List.of(Field.SW),
                 "삼성전자",
@@ -205,11 +226,13 @@ public class MentorControllerTest {
                 MentorStatus.CONTACTING,
                 5L,
                 true,
-                true
+                true,
+                "모두들 건승하십시오."
         );
         MentorPostResponse mockResponse = new MentorPostResponse(
                 1L,
                 "홍길동",
+                "냉철한 경제학과",
                 List.of(dummyMajor),
                 List.of(Field.SW),
                 "삼성전자",
@@ -228,10 +251,12 @@ public class MentorControllerTest {
                 MentorStatus.CONTACTING,
                 5L,
                 true,
-                true
+                true,
+                "모두들 건승하십시오."
         );
         given(mentorService.createMentor(any())).willReturn(mockResponse);
         mockMvc.perform(post("/admin/mentor")
+                        .session(adminSession)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
@@ -239,6 +264,7 @@ public class MentorControllerTest {
                 .andDo(document("mentor/create-mentor",
                         requestFields(
                                 fieldWithPath("name").description("멘토 이름"),
+                                fieldWithPath("alias").description("멘토 표시 이름"),
                                 fieldWithPath("major").description("전공 이름 목록"),
                                 fieldWithPath("field").description("활동 분야 목록"),
                                 fieldWithPath("companyName").description("회사 이름"),
@@ -257,11 +283,13 @@ public class MentorControllerTest {
                                 fieldWithPath("mentorStatus").description("멘토 상태"),
                                 fieldWithPath("mentorLimit").description("멘토 제한 인원"),
                                 fieldWithPath("limitRelease").description("제한 공개 여부"),
-                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부")
+                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부"),
+                                fieldWithPath("oneLine").description("멘토의 한마디")
                         ),
                         responseFields(
                                 fieldWithPath("mentorId").description("멘토 고유 ID"),
                                 fieldWithPath("name").description("멘토 이름"),
+                                fieldWithPath("alias").description("멘토 표시 이름"),
                                 fieldWithPath("major").description("전공 목록"),
                                 fieldWithPath("major[].majorId").description("전공 고유 ID").optional(),
                                 fieldWithPath("major[].name").description("전공 이름").optional(),
@@ -282,7 +310,8 @@ public class MentorControllerTest {
                                 fieldWithPath("mentorStatus").description("멘토 상태"),
                                 fieldWithPath("mentorLimit").description("멘토 제한 인원"),
                                 fieldWithPath("limitRelease").description("제한 공개 여부"),
-                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부")
+                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부"),
+                                fieldWithPath("oneLine").description("멘토의 한마디")
                         )
                 ));
     }
@@ -291,7 +320,8 @@ public class MentorControllerTest {
     @DisplayName("멘토 삭제")
     void deleteMentor() throws Exception {
         Long mentorId = 1L;
-        mockMvc.perform(delete("/admin/mentor/{mentorId}", mentorId))
+        mockMvc.perform(delete("/admin/mentor/{mentorId}", mentorId)
+                        .session(adminSession))
                 .andExpect(status().isNoContent())
                 .andDo(document("mentor/delete-mentor",
                         pathParameters(
@@ -307,6 +337,7 @@ public class MentorControllerTest {
         Major dummyMajor = new Major(1L, "경영학과");
         MentorPostRequest request = new MentorPostRequest(
                 "홍길동",
+                "냉철한 경제학과",
                 List.of("컴퓨터공학과"),
                 List.of(Field.SW),
                 "삼성전자",
@@ -325,11 +356,13 @@ public class MentorControllerTest {
                 MentorStatus.CONTACTING,
                 5L,
                 true,
-                true
+                true,
+                "모두들 건승하십시오."
         );
         MentorPostResponse mockResponse = new MentorPostResponse(
                 1L,
                 "홍길동",
+                "냉철한 경제학과",
                 List.of(dummyMajor),
                 List.of(Field.SW),
                 "삼성전자",
@@ -348,10 +381,12 @@ public class MentorControllerTest {
                 MentorStatus.CONTACTING,
                 5L,
                 true,
-                true
+                true,
+                "모두들 건승하십시오."
         );
         given(mentorService.updateMentor(eq(mentorId), any())).willReturn(mockResponse);
         mockMvc.perform(patch("/admin/mentor/{mentorId}", mentorId)
+                        .session(adminSession)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
@@ -362,6 +397,7 @@ public class MentorControllerTest {
                         ),
                         requestFields(
                                 fieldWithPath("name").description("멘토 이름"),
+                                fieldWithPath("alias").description("멘토 표시 이름"),
                                 fieldWithPath("major").description("전공 이름 목록"),
                                 fieldWithPath("field").description("활동 분야 목록"),
                                 fieldWithPath("companyName").description("회사 이름"),
@@ -380,11 +416,13 @@ public class MentorControllerTest {
                                 fieldWithPath("mentorStatus").description("멘토 상태"),
                                 fieldWithPath("mentorLimit").description("멘토 제한 인원"),
                                 fieldWithPath("limitRelease").description("제한 공개 여부"),
-                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부")
+                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부"),
+                                fieldWithPath("oneLine").description("멘토의 한마디")
                         ),
                         responseFields(
                                 fieldWithPath("mentorId").description("멘토 고유 ID"),
                                 fieldWithPath("name").description("멘토 이름"),
+                                fieldWithPath("alias").description("멘토 표시 이름"),
                                 fieldWithPath("major").description("전공 목록"),
                                 fieldWithPath("major[].majorId").description("전공 고유 ID").optional(),
                                 fieldWithPath("major[].name").description("전공 이름").optional(),
@@ -405,7 +443,8 @@ public class MentorControllerTest {
                                 fieldWithPath("mentorStatus").description("멘토 상태"),
                                 fieldWithPath("mentorLimit").description("멘토 제한 인원"),
                                 fieldWithPath("limitRelease").description("제한 공개 여부"),
-                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부")
+                                fieldWithPath("remainRelease").description("잔여 인원 공개 여부"),
+                                fieldWithPath("oneLine").description("멘토의 한마디")
                         )
                 ));
     }
@@ -420,6 +459,7 @@ public class MentorControllerTest {
                 "csv,data,sample".getBytes()
         );
         mockMvc.perform(multipart("/admin/mentor/batch")
+                        .session(adminSession)
                         .file(file)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

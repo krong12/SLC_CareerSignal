@@ -11,6 +11,7 @@ import java.util.List;
 public class MentorPostResponse {
     private Long mentorId;
     private String name;
+    private String alias;
     private List<Major> major;
     private List<Field> field;
     private String companyName;
@@ -30,9 +31,11 @@ public class MentorPostResponse {
     private Long mentorLimit;
     private boolean limitRelease;
     private boolean remainRelease;
+    private String oneLine;
 
     public MentorPostResponse(Mentor mentor) {
         this.mentorId = mentor.getMentorId();
+        this.alias = mentor.getAlias();
         this.name = mentor.getName();
         this.major = mentor.getMajor();
         this.field = mentor.getField();
@@ -53,5 +56,6 @@ public class MentorPostResponse {
         this.mentorLimit = mentor.getMentorLimit();
         this.limitRelease = mentor.isLimitRelease();
         this.remainRelease = mentor.isRemainRelease();
+        this.oneLine = mentor.getOneLine();
     }
 }

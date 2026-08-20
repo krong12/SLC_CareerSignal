@@ -1,5 +1,6 @@
 package com.slc.mentoring.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.mock.web.MockMultipartFile;
 import tools.jackson.databind.ObjectMapper;
 import com.slc.mentoring.dto.request.UserPostRequest;
@@ -38,15 +39,20 @@ public class UserControllerTest {
     @MockitoBean
     private UserService userService;
 
+    private MockHttpSession adminSession;
+
+    @BeforeEach
+    void setup() {
+        adminSession = new MockHttpSession();
+        UserPostResponse loginUser = new UserPostResponse(1L, "admin");
+        adminSession.setAttribute("LOGIN_USER", loginUser);
+    }
+
     @Test
     @DisplayName("관리자 여부 확인")
     void amIadmin() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "2026123456");
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("LOGIN_USER", sessionUser);
-
         mockMvc.perform(get("/admin/check")
-                        .session(session)
+                        .session(adminSession)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("user/am-i-admin",
@@ -62,6 +68,7 @@ public class UserControllerTest {
         given(userService.signup(any())).willReturn(mockResponse);
 
         mockMvc.perform(post("/admin/user")
+                        .session(adminSession)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
@@ -86,6 +93,7 @@ public class UserControllerTest {
         given(userService.showUsers()).willReturn(mockResponse);
 
         mockMvc.perform(get("/admin/user")
+                        .session(adminSession)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("user/show-users",
@@ -101,7 +109,8 @@ public class UserControllerTest {
     @DisplayName("유저 삭제")
     void deleteUser() throws Exception {
         Long userId = 1L;
-        mockMvc.perform(delete("/admin/user/{userId}", userId))
+        mockMvc.perform(delete("/admin/user/{userId}", userId)
+                        .session(adminSession))
                 .andExpect(status().isNoContent())
                 .andDo(document("user/delete-user",
                         pathParameters(
@@ -155,6 +164,7 @@ public class UserControllerTest {
                 "csv,data,sample".getBytes()
         );
         mockMvc.perform(multipart("/admin/user/batch")
+                        .session(adminSession)
                         .file(file)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
