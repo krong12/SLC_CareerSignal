@@ -97,7 +97,7 @@ public class Mentor {
     @Column(nullable = false)
     private boolean remainRelease; // 잔여 인원 공개 여부
 
-    @Column(nullable = true)
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String oneLine;
 
     @Builder
