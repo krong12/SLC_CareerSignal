@@ -74,6 +74,9 @@ public class Mentor {
 
     @Column(nullable = true)
     private String profileImagePath; // 프로필 이미지 주소, 공개안하면 null
+    
+    @Column(nullable = true)
+    private String cardImagePath; // 카드 이미지 주소 (가로 이미지)
 
     @Column(nullable = false)
     private boolean profileRelease; // 프로필 공개 동의 여부
@@ -100,7 +103,7 @@ public class Mentor {
     @Builder
     public Mentor(String name, String alias, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
                   boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
-                  String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
+                  String linkedin, String profileImagePath, String cardImagePath, boolean profileRelease, boolean voteRelease,
                   MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease, String oneLine) {
         this.name = name;
         this.alias = alias;
@@ -117,6 +120,7 @@ public class Mentor {
         this.introduce = introduce;
         this.linkedin = linkedin;
         this.profileImagePath = profileImagePath;
+        this.cardImagePath = cardImagePath;
         this.profileRelease = profileRelease;
         this.voteRelease = voteRelease;
         this.mentorStatus = mentorStatus;
@@ -128,7 +132,7 @@ public class Mentor {
 
     public void update(String name, String alias, List<Major> major, List<Field> field, String companyName, String job, CareerPath careerPath, String areaName, Area area,
                        boolean foreignSchool, boolean majorRelated, Long graduateYear, String introduce,
-                       String linkedin, String profileImagePath, boolean profileRelease, boolean voteRelease,
+                       String linkedin, String profileImagePath, String cardImagePath, boolean profileRelease, boolean voteRelease,
                        MentorStatus mentorStatus, Long mentorLimit, boolean limitRelease, boolean remainRelease, String oneLine) {
         this.name = name;
         this.alias = alias;
@@ -146,6 +150,7 @@ public class Mentor {
         this.introduce = introduce;
         this.linkedin = linkedin;
         this.profileImagePath = profileImagePath;
+        this.cardImagePath = cardImagePath;
         this.profileRelease = profileRelease;
         this.voteRelease = voteRelease;
         this.mentorStatus = mentorStatus;

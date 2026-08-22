@@ -24,6 +24,7 @@ public class MentorPostRequest {
     private String introduce;
     private String linkedin;
     private String profileImagePath;
+    private String cardImagePath;
     private boolean profileRelease;
     private boolean voteRelease;
     private MentorStatus mentorStatus;

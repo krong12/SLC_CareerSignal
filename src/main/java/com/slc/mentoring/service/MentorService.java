@@ -73,6 +73,7 @@ public class MentorService {
                 .introduce(mentorPostRequest.getIntroduce())
                 .linkedin(mentorPostRequest.getLinkedin())
                 .profileImagePath(mentorPostRequest.getProfileImagePath())
+                .cardImagePath(mentorPostRequest.getCardImagePath())
                 .profileRelease(mentorPostRequest.isProfileRelease())
                 .voteRelease(mentorPostRequest.isVoteRelease())
                 .mentorStatus(mentorPostRequest.getMentorStatus())
@@ -121,6 +122,7 @@ public class MentorService {
                 mentorPostRequest.getIntroduce(),
                 mentorPostRequest.getLinkedin(),
                 mentorPostRequest.getProfileImagePath(),
+                mentorPostRequest.getCardImagePath(),
                 mentorPostRequest.isProfileRelease(),
                 mentorPostRequest.isVoteRelease(),
                 mentorPostRequest.getMentorStatus(),
@@ -230,7 +232,8 @@ public class MentorService {
                         graduatedYear,
                         record.get("introduction"),
                         record.get("linkedin"),
-                        null,
+                        record.get("profileImage"),
+                        record.get("cardImage"),
                         profileRelease,
                         true,
                         MentorStatus.CONTACTING,
@@ -283,6 +286,7 @@ public class MentorService {
                 .introduce(mentorPostRequest.getIntroduce())
                 .linkedin(mentorPostRequest.getLinkedin())
                 .profileImagePath(mentorPostRequest.getProfileImagePath())
+                .cardImagePath(mentorPostRequest.getCardImagePath())
                 .profileRelease(mentorPostRequest.isProfileRelease())
                 .voteRelease(mentorPostRequest.isVoteRelease())
                 .mentorStatus(mentorPostRequest.getMentorStatus())

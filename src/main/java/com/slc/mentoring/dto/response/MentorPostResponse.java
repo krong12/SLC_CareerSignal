@@ -25,6 +25,7 @@ public class MentorPostResponse {
     private String introduce;
     private String linkedin;
     private String profileImagePath;
+    private String cardImagePath;
     private boolean profileRelease;
     private boolean voteRelease;
     private MentorStatus mentorStatus;
@@ -50,6 +51,7 @@ public class MentorPostResponse {
         this.introduce = mentor.getIntroduce();
         this.linkedin = mentor.getLinkedin();
         this.profileImagePath = mentor.getProfileImagePath();
+        this.cardImagePath = mentor.getCardImagePath();
         this.profileRelease = mentor.isProfileRelease();
         this.voteRelease = mentor.isVoteRelease();
         this.mentorStatus = mentor.getMentorStatus();

@@ -884,9 +884,9 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 621
+Content-Length: 663
 
-{"mentorList":[{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":null,"profileRelease":true,"remainRelease":true,"voteRelease":true}]}</code></pre>
+{"mentorList":[{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","cardImagePath":"cardImgPath","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":"profileImgPath","profileRelease":true,"remainRelease":true,"voteRelease":true}]}</code></pre>
 </div>
 </div>
 </div>
@@ -998,8 +998,13 @@ Content-Length: 621
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mentorList[].profileImagePath</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mentorList[].cardImagePath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카드 이미지 경로</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>mentorList[].profileRelease</code></p></td>
@@ -1095,9 +1100,9 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 626
+Content-Length: 668
 
-{"searchedMentors":[{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":null,"profileRelease":true,"remainRelease":true,"voteRelease":true}]}</code></pre>
+{"searchedMentors":[{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","cardImagePath":"cardImgPath","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":"profileImgPath","profileRelease":true,"remainRelease":true,"voteRelease":true}]}</code></pre>
 </div>
 </div>
 </div>
@@ -1209,8 +1214,13 @@ Content-Length: 626
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>searchedMentors[].profileImagePath</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>searchedMentors[].cardImagePath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카드 이미지 경로</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>searchedMentors[].profileRelease</code></p></td>
@@ -1260,10 +1270,10 @@ Content-Length: 626
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /admin/mentor HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Length: 576
+Content-Length: 618
 Host: localhost:8080
 
-{"name":"홍길동","alias":"냉철한 경제학과","major":["컴퓨터공학과"],"field":["SW"],"companyName":"삼성전자","job":"인턴","careerPath":"COMPANY","areaName":"서울","area":"CAPITAL_AREA","foreignSchool":false,"majorRelated":true,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","linkedin":"https://linkedin.com/in/gildong","profileImagePath":null,"profileRelease":true,"voteRelease":true,"mentorStatus":"CONTACTING","mentorLimit":5,"limitRelease":true,"remainRelease":true,"oneLine":"모두들 건승하십시오."}</code></pre>
+{"name":"홍길동","alias":"냉철한 경제학과","major":["컴퓨터공학과"],"field":["SW"],"companyName":"삼성전자","job":"인턴","careerPath":"COMPANY","areaName":"서울","area":"CAPITAL_AREA","foreignSchool":false,"majorRelated":true,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","linkedin":"https://linkedin.com/in/gildong","profileImagePath":"profileImgPath","cardImagePath":"cardImgPath","profileRelease":true,"voteRelease":true,"mentorStatus":"CONTACTING","mentorLimit":5,"limitRelease":true,"remainRelease":true,"oneLine":"모두들 건승하십시오."}</code></pre>
 </div>
 </div>
 </div>
@@ -1355,8 +1365,13 @@ Host: localhost:8080
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImagePath</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cardImagePath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카드 이미지 경로</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileRelease</code></p></td>
@@ -1402,9 +1417,9 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 604
+Content-Length: 646
 
-{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":null,"profileRelease":true,"remainRelease":true,"voteRelease":true}</code></pre>
+{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","cardImagePath":"cardImgPath","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":"profileImgPath","profileRelease":true,"remainRelease":true,"voteRelease":true}</code></pre>
 </div>
 </div>
 </div>
@@ -1511,8 +1526,13 @@ Content-Length: 604
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImagePath</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cardImagePath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카드 이미지 경로</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileRelease</code></p></td>
@@ -1562,10 +1582,10 @@ Content-Length: 604
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /admin/mentor/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Length: 576
+Content-Length: 618
 Host: localhost:8080
 
-{"name":"홍길동","alias":"냉철한 경제학과","major":["컴퓨터공학과"],"field":["SW"],"companyName":"삼성전자","job":"인턴","careerPath":"COMPANY","areaName":"서울","area":"CAPITAL_AREA","foreignSchool":false,"majorRelated":true,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","linkedin":"https://linkedin.com/in/gildong","profileImagePath":null,"profileRelease":true,"voteRelease":true,"mentorStatus":"CONTACTING","mentorLimit":5,"limitRelease":true,"remainRelease":true,"oneLine":"모두들 건승하십시오."}</code></pre>
+{"name":"홍길동","alias":"냉철한 경제학과","major":["컴퓨터공학과"],"field":["SW"],"companyName":"삼성전자","job":"인턴","careerPath":"COMPANY","areaName":"서울","area":"CAPITAL_AREA","foreignSchool":false,"majorRelated":true,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","linkedin":"https://linkedin.com/in/gildong","profileImagePath":"profileImgPath","cardImagePath":"cardImgPath","profileRelease":true,"voteRelease":true,"mentorStatus":"CONTACTING","mentorLimit":5,"limitRelease":true,"remainRelease":true,"oneLine":"모두들 건승하십시오."}</code></pre>
 </div>
 </div>
 </div>
@@ -1679,8 +1699,13 @@ Host: localhost:8080
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImagePath</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cardImagePath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카드 이미지 경로</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileRelease</code></p></td>
@@ -1726,9 +1751,9 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 604
+Content-Length: 646
 
-{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":null,"profileRelease":true,"remainRelease":true,"voteRelease":true}</code></pre>
+{"alias":"냉철한 경제학과","area":"CAPITAL_AREA","areaName":"서울","cardImagePath":"cardImgPath","careerPath":"COMPANY","companyName":"삼성전자","field":["SW"],"foreignSchool":false,"graduatedYear":2020,"introduce":"안녕하세요, 백엔드 멘토 홍길동입니다.","job":"인턴","limitRelease":true,"linkedin":"https://linkedin.com/in/gildong","major":[{"majorId":1,"name":"경영학과"}],"majorRelated":true,"mentorId":1,"mentorLimit":5,"mentorStatus":"CONTACTING","name":"홍길동","oneLine":"모두들 건승하십시오.","profileImagePath":"profileImgPath","profileRelease":true,"remainRelease":true,"voteRelease":true}</code></pre>
 </div>
 </div>
 </div>
@@ -1835,8 +1860,13 @@ Content-Length: 604
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImagePath</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">프로필 이미지 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>cardImagePath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">카드 이미지 경로</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileRelease</code></p></td>
