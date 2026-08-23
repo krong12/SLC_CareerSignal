@@ -474,8 +474,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_3_2_투표_생성">3.2. 투표 생성</a></li>
 <li><a href="#_3_3_관심_등록_즐겨찾기">3.3. 관심 등록 (즐겨찾기)</a></li>
 <li><a href="#_3_4_투표_취소_삭제">3.4. 투표 취소 (삭제)</a></li>
-<li><a href="#_3_5_특정_멘토_투표_수_조회">3.5. 특정 멘토 투표 수 조회</a></li>
-<li><a href="#_3_6_잔여_투표권_수_조회">3.6. 잔여 투표권 수 조회</a></li>
+<li><a href="#_3_5_관심_등록_취소_즐겨찾기_삭제">3.5. 관심 등록 취소 (즐겨찾기 삭제)</a></li>
+<li><a href="#_3_6_특정_멘토_투표_수_조회">3.6. 특정 멘토 투표 수 조회</a></li>
+<li><a href="#_3_7_잔여_투표권_수_조회">3.7. 잔여 투표권 수 조회</a></li>
 </ul>
 </li>
 <li><a href="#_4_파일_file_api">4. 파일 (File) API</a>
@@ -2266,9 +2267,51 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_3_5_특정_멘토_투표_수_조회"><a class="link" href="#_3_5_특정_멘토_투표_수_조회">3.5. 특정 멘토 투표 수 조회</a></h3>
+<h3 id="_3_5_관심_등록_취소_즐겨찾기_삭제"><a class="link" href="#_3_5_관심_등록_취소_즐겨찾기_삭제">3.5. 관심 등록 취소 (즐겨찾기 삭제)</a></h3>
 <div class="sect3">
-<h4 id="_3_5_특정_멘토_투표_수_조회_http_request"><a class="link" href="#_3_5_특정_멘토_투표_수_조회_http_request">HTTP request</a></h4>
+<h4 id="_3_5_관심_등록_취소_즐겨찾기_삭제_http_request"><a class="link" href="#_3_5_관심_등록_취소_즐겨찾기_삭제_http_request">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /vote/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_3_5_관심_등록_취소_즐겨찾기_삭제_path_parameters"><a class="link" href="#_3_5_관심_등록_취소_즐겨찾기_삭제_path_parameters">Path parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /vote/{mentorId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mentorId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">취소할 멘토 고유 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_3_5_관심_등록_취소_즐겨찾기_삭제_http_response"><a class="link" href="#_3_5_관심_등록_취소_즐겨찾기_삭제_http_response">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_6_특정_멘토_투표_수_조회"><a class="link" href="#_3_6_특정_멘토_투표_수_조회">3.6. 특정 멘토 투표 수 조회</a></h3>
+<div class="sect3">
+<h4 id="_3_6_특정_멘토_투표_수_조회_http_request"><a class="link" href="#_3_6_특정_멘토_투표_수_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /vote/mentor/1 HTTP/1.1
@@ -2278,7 +2321,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_5_특정_멘토_투표_수_조회_path_parameters"><a class="link" href="#_3_5_특정_멘토_투표_수_조회_path_parameters">Path parameters</a></h4>
+<h4 id="_3_6_특정_멘토_투표_수_조회_path_parameters"><a class="link" href="#_3_6_특정_멘토_투표_수_조회_path_parameters">Path parameters</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /vote/mentor/{mentorId}</caption>
 <colgroup>
@@ -2300,7 +2343,7 @@ Host: localhost:8080</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_3_5_특정_멘토_투표_수_조회_http_response"><a class="link" href="#_3_5_특정_멘토_투표_수_조회_http_response">HTTP response</a></h4>
+<h4 id="_3_6_특정_멘토_투표_수_조회_http_response"><a class="link" href="#_3_6_특정_멘토_투표_수_조회_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2313,9 +2356,9 @@ Content-Length: 1
 </div>
 </div>
 <div class="sect2">
-<h3 id="_3_6_잔여_투표권_수_조회"><a class="link" href="#_3_6_잔여_투표권_수_조회">3.6. 잔여 투표권 수 조회</a></h3>
+<h3 id="_3_7_잔여_투표권_수_조회"><a class="link" href="#_3_7_잔여_투표권_수_조회">3.7. 잔여 투표권 수 조회</a></h3>
 <div class="sect3">
-<h4 id="_3_6_잔여_투표권_수_조회_http_request"><a class="link" href="#_3_6_잔여_투표권_수_조회_http_request">HTTP request</a></h4>
+<h4 id="_3_7_잔여_투표권_수_조회_http_request"><a class="link" href="#_3_7_잔여_투표권_수_조회_http_request">HTTP request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /vote/remain HTTP/1.1
@@ -2325,7 +2368,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_3_6_잔여_투표권_수_조회_http_response"><a class="link" href="#_3_6_잔여_투표권_수_조회_http_response">HTTP response</a></h4>
+<h4 id="_3_7_잔여_투표권_수_조회_http_response"><a class="link" href="#_3_7_잔여_투표권_수_조회_http_response">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2450,7 +2493,7 @@ test image content</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2026-08-11 02:33:38 +0900
+Last updated 2026-08-23 20:48:15 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

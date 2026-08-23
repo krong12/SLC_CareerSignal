@@ -64,10 +64,13 @@ operation::vote/create-favorite[snippets='http-request,request-fields,http-respo
 === 3.4. 투표 취소 (삭제)
 operation::vote/delete-vote[snippets='http-request,path-parameters,http-response']
 
-=== 3.5. 특정 멘토 투표 수 조회
+=== 3.5. 관심 등록 취소 (즐겨찾기 삭제)
+operation::vote/delete-favorite[snippets='http-request,path-parameters,http-response']
+
+=== 3.6. 특정 멘토 투표 수 조회
 operation::vote/get-mentor-vote-count[snippets='http-request,path-parameters,http-response']
 
-=== 3.6. 잔여 투표권 수 조회
+=== 3.7. 잔여 투표권 수 조회
 operation::vote/get-remaining-vote-count[snippets='http-request,http-response']
 
 

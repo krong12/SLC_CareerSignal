@@ -135,6 +135,25 @@ public class VoteControllerTest {
     }
 
     @Test
+    @DisplayName("관심 등록 취소(삭제)")
+    void deleteFavorite() throws Exception {
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("LOGIN_USER", sessionUser);
+
+        Long mentorId = 1L;
+
+        mockMvc.perform(delete("/vote/{mentorId}", mentorId)
+                        .session(session))
+                .andExpect(status().isNoContent())
+                .andDo(document("vote/delete-favorite",
+                        pathParameters(
+                                parameterWithName("mentorId").description("취소할 멘토 고유 ID")
+                        )
+                ));
+    }
+
+    @Test
     @DisplayName("특정 멘토 투표 수 조회")
     void getMentorVoteCount() throws Exception {
         Long mentorId = 1L;
