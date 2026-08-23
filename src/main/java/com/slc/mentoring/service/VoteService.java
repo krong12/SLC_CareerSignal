@@ -37,6 +37,16 @@ public class VoteService {
         return new VoteGetResponse(votePostResponseList);
     }
 
+    public VoteGetResponse showFavorite(Long userId) {
+        User user = userRepository.findById(userId) // 유효한 유저인지 확인
+                .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
+        List<Favorite> favoriteList = favoriteRepository.findAllByUser_UserId(userId);
+        List<VotePostResponse> votePostResponseList = favoriteList.stream()
+                .map(VotePostResponse::new)
+                .toList();
+        return new VoteGetResponse(votePostResponseList);
+    }
+
     public VotePostResponse CreateVote(Long userId, Long mentorId) {
         User user = userRepository.findById(userId) // 유효한 유저인지 확인
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));

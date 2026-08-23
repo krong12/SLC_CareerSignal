@@ -64,6 +64,28 @@ public class VoteControllerTest {
     }
 
     @Test
+    @DisplayName("관심 목록 조회")
+    void showFavorites() throws Exception {
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("LOGIN_USER", sessionUser);
+
+        VoteGetResponse mockResponse = new VoteGetResponse(List.of());
+        given(voteService.showFavorite(anyLong())).willReturn(mockResponse);
+
+        mockMvc.perform(get("/favorite")
+                        .session(session)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("vote/show-favorites",
+                        responseFields(
+                                fieldWithPath("votes").description("관심 정보 리스트")
+                                // Vote 엔티티의 필드 구조에 따라 하위 필드가 있다면 votes[].fieldName 형태로 추가 필요
+                        )
+                ));
+    }
+
+    @Test
     @DisplayName("투표 생성")
     void createVote() throws Exception {
         UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");

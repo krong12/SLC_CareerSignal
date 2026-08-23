@@ -1,5 +1,6 @@
 package com.slc.mentoring.dto.response;
 
+import com.slc.mentoring.entity.Favorite;
 import com.slc.mentoring.entity.Vote;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +18,11 @@ public class VotePostResponse {
         this.voteId = vote.getVoteId();
         this.mentorId = vote.getMentor().getMentorId();
         this.mentorName = vote.getMentor().getName();
+    }
+
+    public VotePostResponse(Favorite favorite) {
+        this.voteId = favorite.getFavoriteId();
+        this.mentorId = favorite.getMentor().getMentorId();
+        this.mentorName = null;
     }
 }

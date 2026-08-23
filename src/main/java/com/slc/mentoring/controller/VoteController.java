@@ -24,6 +24,14 @@ public class VoteController {
         return ResponseEntity.ok(voteGetResponse);
     }
 
+    @GetMapping("/favorite")
+    public ResponseEntity<VoteGetResponse> showFavorites(
+            @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
+        if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
+        VoteGetResponse favoriteGetResponse = voteService.showFavorite(userInfo.getUserId());
+        return ResponseEntity.ok(favoriteGetResponse);
+    }
+
     @PostMapping("/vote")
     public ResponseEntity<VotePostResponse> CreateVote(@RequestBody VotePostRequest votePostRequest,
                                                        @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
