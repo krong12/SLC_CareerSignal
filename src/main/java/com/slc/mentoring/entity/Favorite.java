@@ -9,17 +9,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(
-        name = "votes",
+        name = "favorite",
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_user_mentor", columnNames = {"userId", "mentorId"})
         })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class Vote {
+public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long voteId;
+    private Long favoriteId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -29,17 +29,9 @@ public class Vote {
     @JoinColumn(name = "mentorId")
     private Mentor mentor;
 
-    @Column(nullable = false)
-    private boolean isFinal; // true면 최종제출, false면 임시선택
-
-    @Column(nullable = false)
-    private boolean isValid; // 유효여부
-
     @Builder
-    public Vote(User user, Mentor mentor, boolean isFinal) {
+    public Favorite(User user, Mentor mentor){
         this.user = user;
         this.mentor = mentor;
-        this.isFinal = isFinal;
-        this.isValid = true;
     }
 }

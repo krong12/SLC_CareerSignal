@@ -101,22 +101,16 @@ public class VoteControllerTest {
 
         VotePostRequest request = new VotePostRequest(1L);
         VotePostResponse mockResponse = new VotePostResponse(1L, 1L, "홍길동");
-        given(voteService.CreateFavorite(any(), any())).willReturn(mockResponse);
 
         mockMvc.perform(post("/favorite")
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andDo(document("vote/create-favorite",
                         requestFields(
                                 fieldWithPath("mentorId").description("관심 등록할 멘토 고유 ID")
-                        ),
-                        responseFields(
-                                fieldWithPath("voteId").description("관심/투표 고유 ID").optional(),
-                                fieldWithPath("mentorId").description("멘토 고유 ID").optional(),
-                                fieldWithPath("mentorName").description("멘토 이름").optional()
                         )
                 ));
     }

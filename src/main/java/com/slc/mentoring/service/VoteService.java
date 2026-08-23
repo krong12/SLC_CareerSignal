@@ -2,11 +2,13 @@ package com.slc.mentoring.service;
 
 import com.slc.mentoring.dto.response.VoteGetResponse;
 import com.slc.mentoring.dto.response.VotePostResponse;
+import com.slc.mentoring.entity.Favorite;
 import com.slc.mentoring.entity.Mentor;
 import com.slc.mentoring.entity.User;
 import com.slc.mentoring.entity.Vote;
 import com.slc.mentoring.global.error.CustomException;
 import com.slc.mentoring.global.error.ExceptionCode;
+import com.slc.mentoring.repository.FavoriteRepository;
 import com.slc.mentoring.repository.MentorRepository;
 import com.slc.mentoring.repository.UserRepository;
 import com.slc.mentoring.repository.VoteRepository;
@@ -23,6 +25,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final MentorRepository mentorRepository;
+    private final FavoriteRepository favoriteRepository;
 
     public VoteGetResponse showVote(Long userId) {
         User user = userRepository.findById(userId) // 유효한 유저인지 확인
@@ -47,14 +50,8 @@ public class VoteService {
         }
 
         if(voteRepository.existsByUserAndMentor(user, mentor)) {
-            Vote tmp = voteRepository.findByUser_UserIdAndMentor_MentorId(userId, mentorId);
-            if(!tmp.isFinal()) { // 이미 찜했으면 확정으로 변경
-                tmp.update_vote();
-                return new VotePostResponse(new Vote(user, mentor, true));
-            }
-            else { // 만약 기존에 같은 멘토에게 찜 혹은 투표를 한 이력이 있으면 에러 띄우기
-                throw new CustomException(ExceptionCode.ALREADY_EXISTS_VOTE);
-            }
+            // 만약 기존에 같은 멘토에게 찜 혹은 투표를 한 이력이 있으면 에러 띄우기
+            throw new CustomException(ExceptionCode.ALREADY_EXISTS_VOTE);
         }
 
         Vote vote = new Vote(user, mentor, true);
@@ -62,19 +59,18 @@ public class VoteService {
         return new VotePostResponse(savedVote);
     }
 
-    public VotePostResponse CreateFavorite(Long userId, Long mentorId) {
+    public void CreateFavorite(Long userId, Long mentorId) {
         User user = userRepository.findById(userId) // 유효한 유저인지 확인
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
         Mentor mentor = mentorRepository.findById(mentorId) // 유효한 멘토인지 확인
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_MENTOR_ID));
 
-        if(voteRepository.existsByUserAndMentor(user, mentor)) { // 만약 기존에 같은 멘토에게 찜 혹은 투표를 한 이력이 있으면 에러 띄우기
+        if(favoriteRepository.existsByUserAndMentor(user, mentor)) { // 만약 기존에 같은 멘토에게 찜 혹은 투표를 한 이력이 있으면 에러 띄우기
             throw new CustomException(ExceptionCode.ALREADY_EXISTS_VOTE);
         }
 
-        Vote vote = new Vote(user, mentor, false);
-        Vote savedVote = voteRepository.save(vote);
-        return new VotePostResponse(savedVote);
+        Favorite favorite = new Favorite(user, mentor);
+        favoriteRepository.save(favorite);
     }
 
     public void DeleteVote(Long userId, Long mentorId) {
@@ -87,7 +83,18 @@ public class VoteService {
             Vote vote = voteRepository.findByUser_UserIdAndMentor_MentorId(userId, mentorId);
             voteRepository.deleteById(vote.getVoteId());
         }
-        return;
+    }
+
+    public void DeleteFavorite(Long userId, Long mentorId) {
+        User user = userRepository.findById(userId) // 유효한 유저인지 확인
+                .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
+        Mentor mentor = mentorRepository.findById(mentorId) // 유효한 멘토인지 확인
+                .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_MENTOR_ID));
+
+        if(favoriteRepository.existsByUserAndMentor(user, mentor)) {
+            Favorite favorite = favoriteRepository.findByUser_UserIdAndMentor_MentorId(userId, mentorId);
+            favoriteRepository.deleteById(favorite.getFavoriteId());
+        }
     }
 
     public Long getMentorVoteCount(Long mentorId) {

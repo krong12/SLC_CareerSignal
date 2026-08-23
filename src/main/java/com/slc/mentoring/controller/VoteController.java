@@ -33,11 +33,11 @@ public class VoteController {
     }
 
     @PostMapping("/favorite")
-    public ResponseEntity<VotePostResponse> CreateFavorite(@RequestBody VotePostRequest votePostRequest,
+    public ResponseEntity<Void> CreateFavorite(@RequestBody VotePostRequest votePostRequest,
                                                            @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
         if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
-        VotePostResponse votePostResponse = voteService.CreateFavorite(userInfo.getUserId(), votePostRequest.getMentorId());
-        return ResponseEntity.ok(votePostResponse);
+        voteService.CreateFavorite(userInfo.getUserId(), votePostRequest.getMentorId());
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/vote/{mentorId}")
@@ -45,6 +45,14 @@ public class VoteController {
                                            @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
         if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
         voteService.DeleteVote(userInfo.getUserId(), mentorId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/favorite/{favoriteId}")
+    public ResponseEntity<Void> DeleteFavorite(@PathVariable Long mentorId,
+                                               @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
+        if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
+        voteService.DeleteFavorite(userInfo.getUserId(), mentorId);
         return ResponseEntity.noContent().build();
     }
 
