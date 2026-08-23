@@ -37,11 +37,11 @@ public class UserService {
             throw new CustomException(ExceptionCode.NOT_MATCHED_PASSCODE);
         }
 
-        return new UserPostResponse(user.getUserId(), user.getStudentId());
+        return new UserPostResponse(user.getUserId(), user.getStudentId(), user.getName());
     }
 
     public UserPostResponse signup(UserPostRequest userPostRequest) {
-        User user = new User(userPostRequest.getStudentId(), userPostRequest.getPassCode());
+        User user = new User(userPostRequest.getStudentId(), userPostRequest.getPassCode(), userPostRequest.getName());
         User savedUser = userRepository.save(user);
         return new UserPostResponse(savedUser);
     }
@@ -74,7 +74,8 @@ public class UserService {
             for(CSVRecord record : csvRecords) {
                 UserPostRequest request = new UserPostRequest(
                         record.get("studentId"),
-                        record.get("passCode")
+                        record.get("passCode"),
+                        record.get("name")
                 );
                 userPostRequests.add(request);
             }

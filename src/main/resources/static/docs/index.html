@@ -527,10 +527,10 @@ true</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /admin/user HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Length: 52
+Content-Length: 71
 Host: localhost:8080
 
-{"studentId":"2026123456","passCode":"password1234"}</code></pre>
+{"studentId":"2026123456","passCode":"password1234","name":"홍길동"}</code></pre>
 </div>
 </div>
 </div>
@@ -560,6 +560,11 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">패스코드</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -569,9 +574,9 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 37
+Content-Length: 56
 
-{"studentId":"2026123456","userId":1}</code></pre>
+{"name":"홍길동","studentId":"2026123456","userId":1}</code></pre>
 </div>
 </div>
 </div>
@@ -601,6 +606,11 @@ Content-Length: 37
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">학번</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -623,9 +633,9 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 53
+Content-Length: 72
 
-{"user_list":[{"studentId":"2026123456","userId":1}]}</code></pre>
+{"user_list":[{"name":"홍길동","studentId":"2026123456","userId":1}]}</code></pre>
 </div>
 </div>
 </div>
@@ -659,6 +669,11 @@ Content-Length: 53
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>user_list[].studentId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">학번</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>user_list[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
 </tr>
 </tbody>
 </table>
@@ -715,10 +730,10 @@ Host: localhost:8080</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /login HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
-Content-Length: 52
+Content-Length: 71
 Host: localhost:8080
 
-{"studentId":"2026123456","passCode":"password1234"}</code></pre>
+{"studentId":"2026123456","passCode":"password1234","name":"홍길동"}</code></pre>
 </div>
 </div>
 </div>
@@ -748,6 +763,11 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">패스코드</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -757,9 +777,9 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 37
+Content-Length: 56
 
-{"studentId":"2026123456","userId":1}</code></pre>
+{"name":"홍길동","studentId":"2026123456","userId":1}</code></pre>
 </div>
 </div>
 </div>
@@ -788,6 +808,11 @@ Content-Length: 37
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>studentId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">학번</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이름</p></td>
 </tr>
 </tbody>
 </table>

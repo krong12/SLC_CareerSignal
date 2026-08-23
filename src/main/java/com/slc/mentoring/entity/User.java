@@ -22,9 +22,13 @@ public class User {
     @Column(nullable = false, unique = true)
     private String passCode;
 
+    @Column(nullable = false)
+    private String name;
+
     @Builder
-    public User(String studentId, String passCode) {
+    public User(String studentId, String passCode, String name) {
         this.studentId = studentId;
         this.passCode = passCode;
+        this.name = name;
     }
 }

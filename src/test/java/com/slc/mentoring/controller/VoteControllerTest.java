@@ -44,7 +44,7 @@ public class VoteControllerTest {
     @Test
     @DisplayName("투표 목록 조회")
     void showVotes() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234", "홍길동");
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("LOGIN_USER", sessionUser);
 
@@ -66,7 +66,7 @@ public class VoteControllerTest {
     @Test
     @DisplayName("관심 목록 조회")
     void showFavorites() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234", "홍길동");
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("LOGIN_USER", sessionUser);
 
@@ -88,7 +88,7 @@ public class VoteControllerTest {
     @Test
     @DisplayName("투표 생성")
     void createVote() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234", "홍길동");
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("LOGIN_USER", sessionUser);
 
@@ -117,7 +117,7 @@ public class VoteControllerTest {
     @Test
     @DisplayName("관심 등록 (즐겨찾기)")
     void createFavorite() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234", "홍길동");
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("LOGIN_USER", sessionUser);
 
@@ -140,7 +140,7 @@ public class VoteControllerTest {
     @Test
     @DisplayName("투표 취소(삭제)")
     void deleteVote() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234", "홍길동");
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("LOGIN_USER", sessionUser);
 
@@ -159,7 +159,7 @@ public class VoteControllerTest {
     @Test
     @DisplayName("관심 등록 취소(삭제)")
     void deleteFavorite() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234", "홍길동");
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("LOGIN_USER", sessionUser);
 
@@ -195,7 +195,7 @@ public class VoteControllerTest {
     @Test
     @DisplayName("잔여 투표권 수 조회")
     void getRemainingVoteCount() throws Exception {
-        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234");
+        UserPostResponse sessionUser = new UserPostResponse(1L, "20231234", "홍길동");
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("LOGIN_USER", sessionUser);
 

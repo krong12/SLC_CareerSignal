@@ -8,4 +8,5 @@ import lombok.Getter;
 public class UserPostRequest {
     private String studentId;
     private String passCode;
+    private String name;
 }

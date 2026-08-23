@@ -44,7 +44,7 @@ public class UserControllerTest {
     @BeforeEach
     void setup() {
         adminSession = new MockHttpSession();
-        UserPostResponse loginUser = new UserPostResponse(1L, "admin");
+        UserPostResponse loginUser = new UserPostResponse(1L, "admin", "관리자");
         adminSession.setAttribute("LOGIN_USER", loginUser);
     }
 
@@ -63,8 +63,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("유저 등록")
     void signup() throws Exception {
-        UserPostRequest request = new UserPostRequest("2026123456", "password1234");
-        UserPostResponse mockResponse = new UserPostResponse(1L, "2026123456");
+        UserPostRequest request = new UserPostRequest("2026123456", "password1234", "홍길동");
+        UserPostResponse mockResponse = new UserPostResponse(1L, "2026123456", "홍길동");
         given(userService.signup(any())).willReturn(mockResponse);
 
         mockMvc.perform(post("/admin/user")
@@ -76,11 +76,13 @@ public class UserControllerTest {
                 .andDo(document("user/signup",
                         requestFields(
                                 fieldWithPath("studentId").description("학번"),
-                                fieldWithPath("passCode").description("패스코드")
+                                fieldWithPath("passCode").description("패스코드"),
+                                fieldWithPath("name").description("이름")
                         ),
                         responseFields(
                                 fieldWithPath("userId").description("유저 고유 ID"),
-                                fieldWithPath("studentId").description("학번")
+                                fieldWithPath("studentId").description("학번"),
+                                fieldWithPath("name").description("이름")
                         )
                 ));
     }
@@ -88,7 +90,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("유저 전체 조회")
     void showUsers() throws Exception {
-        UserPostResponse userResponse = new UserPostResponse(1L, "2026123456");
+        UserPostResponse userResponse = new UserPostResponse(1L, "2026123456", "홍길동");
         UserGetResponse mockResponse = new UserGetResponse(List.of(userResponse));
         given(userService.showUsers()).willReturn(mockResponse);
 
@@ -100,7 +102,8 @@ public class UserControllerTest {
                         responseFields(
                                 fieldWithPath("user_list").description("유저 정보 리스트"),
                                 fieldWithPath("user_list[].userId").description("유저 고유 ID"),
-                                fieldWithPath("user_list[].studentId").description("학번")
+                                fieldWithPath("user_list[].studentId").description("학번"),
+                                fieldWithPath("user_list[].name").description("이름")
                         )
                 ));
     }
@@ -122,8 +125,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("로그인")
     void login() throws Exception {
-        UserPostRequest request = new UserPostRequest("2026123456", "password1234");
-        UserPostResponse mockResponse = new UserPostResponse(1L, "2026123456");
+        UserPostRequest request = new UserPostRequest("2026123456", "password1234", "홍길동");
+        UserPostResponse mockResponse = new UserPostResponse(1L, "2026123456", "홍길동");
         given(userService.login(any())).willReturn(mockResponse);
 
         mockMvc.perform(post("/login")
@@ -134,11 +137,13 @@ public class UserControllerTest {
                 .andDo(document("user/login",
                         requestFields(
                                 fieldWithPath("studentId").description("학번"),
-                                fieldWithPath("passCode").description("패스코드")
+                                fieldWithPath("passCode").description("패스코드"),
+                                fieldWithPath("name").description("이름")
                         ),
                         responseFields(
                                 fieldWithPath("userId").description("유저 고유 ID"),
-                                fieldWithPath("studentId").description("학번")
+                                fieldWithPath("studentId").description("학번"),
+                                fieldWithPath("name").description("이름")
                         )
                 ));
     }

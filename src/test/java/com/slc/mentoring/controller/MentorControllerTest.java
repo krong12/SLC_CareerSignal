@@ -48,7 +48,7 @@ public class MentorControllerTest {
     @BeforeEach
     void setup() {
         adminSession = new MockHttpSession();
-        UserPostResponse loginUser = new UserPostResponse(1L, "admin");
+        UserPostResponse loginUser = new UserPostResponse(1L, "admin", "관리자");
         adminSession.setAttribute("LOGIN_USER", loginUser);
     }
 
