@@ -48,7 +48,7 @@ public class VoteController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/favorite/{favoriteId}")
+    @DeleteMapping("/favorite/{mentorId}")
     public ResponseEntity<Void> DeleteFavorite(@PathVariable Long mentorId,
                                                @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
         if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
