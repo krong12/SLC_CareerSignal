@@ -51,4 +51,16 @@ public class MentorController {
         mentorService.createMentorsByCSV(file);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/mentor/matching")
+    public ResponseEntity<MentorGetResponse> showConfirmedMentors() {
+        MentorGetResponse response = mentorService.showConfirmedMentors();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/mentorSearch/matching")
+    public ResponseEntity<MentorSearchResponse> searchConfirmedMentors(MentorSearchRequest mentorSearchRequest) {
+        MentorSearchResponse mentorSearchResponse = mentorService.searchMentors(mentorSearchRequest);
+        return ResponseEntity.ok(mentorSearchResponse);
+    }
 }

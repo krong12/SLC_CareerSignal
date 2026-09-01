@@ -299,4 +299,61 @@ public class MentorService {
         Mentor savedMentor = mentorRepository.save(mentor);
         return new MentorPostResponse(savedMentor);
     }
+
+    public MentorGetResponse showConfirmedMentors() {
+        List<Mentor> mentors = mentorRepository.findByMentorStatus(MentorStatus.COMFIRMED);
+
+        mentors.forEach(mentor -> {
+            mentor.getMajor().size();
+            mentor.getField().size();
+        });
+        List<MentorPostResponse> mentorList = mentors.stream()
+                .map(MentorPostResponse::new)
+                .toList();
+        return new MentorGetResponse(mentorList);
+    }
+
+    public MentorSearchResponse searchConfirmedMentors(MentorSearchRequest mentorSearchRequest) {
+        List<Mentor> mentors =  mentorRepository.findByMentorStatus(MentorStatus.COMFIRMED);
+        mentors.forEach(mentor -> {
+            mentor.getMajor().size();
+            mentor.getField().size();
+        });
+        List<MentorPostResponse> searchedMentors = mentors.stream()
+                .filter(mentor -> {
+                    List<String> reqMajors = mentorSearchRequest.getMajorNames();
+                    if(reqMajors != null && !reqMajors.isEmpty()) {
+                        boolean match = mentor.getMajor().stream()
+                                .anyMatch(major -> reqMajors.contains(major.getName()));
+                        if(!match) return false;
+                    }
+
+                    List<Field> reqFields = mentorSearchRequest.getFields();
+                    if(reqFields != null && !reqFields.isEmpty()) {
+                        boolean match = mentor.getField().stream()
+                                .anyMatch(reqFields::contains);
+                        if(!match) return false;
+                    }
+
+                    List<CareerPath> reqCareerPaths = mentorSearchRequest.getCareerPaths();
+                    if(reqCareerPaths != null && !reqCareerPaths.isEmpty())
+                        if(!reqCareerPaths.contains(mentor.getCareerPath()))
+                            return false;
+
+                    List<Boolean> reqForeignSchools = mentorSearchRequest.getForeignSchools();
+                    if(reqForeignSchools != null && !reqForeignSchools.isEmpty())
+                        if(!reqForeignSchools.contains(mentor.isForeignSchool()))
+                            return false;
+
+                    List<Boolean> reqMajorRelated = mentorSearchRequest.getMajorRelated();
+                    if(reqMajorRelated != null && !reqMajorRelated.isEmpty())
+                        if(!reqMajorRelated.contains(mentor.isMajorRelated()))
+                            return false;
+
+                    return true;
+                })
+                .map(MentorPostResponse::new)
+                .toList();
+        return new MentorSearchResponse(searchedMentors);
+    }
 }

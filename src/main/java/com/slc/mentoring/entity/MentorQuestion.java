@@ -2,13 +2,10 @@ package com.slc.mentoring.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,13 +27,10 @@ public class MentorQuestion {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
-    private boolean isActive; // 활성여부
-
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    private LocalDateTime updateAt;
+    @Builder
+    public MentorQuestion(User user, Mentor mentor, String content) {
+        this.user = user;
+        this.mentor = mentor;
+        this.content = content;
+    }
 }

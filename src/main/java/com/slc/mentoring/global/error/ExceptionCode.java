@@ -17,6 +17,8 @@ public enum ExceptionCode {
     ALREADY_EXISTS_VOTE(HttpStatus.CONFLICT, "이미 투표한 멘토입니다."),
     TOO_MANY_VOTE(HttpStatus.BAD_REQUEST, "투표 횟수가 3회를 넘어섰습니다."),
     NOT_LOGINED(HttpStatus.UNAUTHORIZED, "로그인되지 않았습니다."),
+    NOT_CONFIRMED_MENTOR(HttpStatus.BAD_REQUEST, "섭외되지 않은 멘토를 선택했습니다."),
+    NOT_FOUND_RECORD(HttpStatus.NOT_FOUND, "해당 유저의 레코드를 찾을 수 없습니다."),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
 
