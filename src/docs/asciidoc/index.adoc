@@ -104,3 +104,21 @@ operation::record-update[snippets='http-request,request-fields,http-response,res
 
 === 5.4. 레코드 삭제
 operation::record-delete[snippets='http-request,http-response']
+
+
+== 6. 매칭 결과 API
+
+=== 6.1. 결과 조회
+operation::result-show[snippets='http-request,http-response,response-fields']
+
+=== 6.2. 결과 생성 (관리자)
+operation::result-create[snippets='http-request,request-fields,http-response,response-fields']
+
+=== 6.3. 결과 수정 (관리자)
+operation::result-update[snippets='http-request,request-fields,http-response,response-fields']
+
+=== 6.4. 결과 삭제
+operation::result-delete[snippets='http-request,http-response']
+
+=== 6.5. CSV로 결과 일괄 등록 (관리자)
+operation::result-batch-create[snippets='http-request,request-parts,http-response']

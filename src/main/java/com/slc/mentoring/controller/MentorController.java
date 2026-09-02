@@ -60,7 +60,7 @@ public class MentorController {
 
     @GetMapping("/mentorSearch/matching")
     public ResponseEntity<MentorSearchResponse> searchConfirmedMentors(MentorSearchRequest mentorSearchRequest) {
-        MentorSearchResponse mentorSearchResponse = mentorService.searchMentors(mentorSearchRequest);
+        MentorSearchResponse mentorSearchResponse = mentorService.searchConfirmedMentors(mentorSearchRequest);
         return ResponseEntity.ok(mentorSearchResponse);
     }
 }

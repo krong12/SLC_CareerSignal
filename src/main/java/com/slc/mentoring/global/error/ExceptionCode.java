@@ -19,6 +19,7 @@ public enum ExceptionCode {
     NOT_LOGINED(HttpStatus.UNAUTHORIZED, "로그인되지 않았습니다."),
     NOT_CONFIRMED_MENTOR(HttpStatus.BAD_REQUEST, "섭외되지 않은 멘토를 선택했습니다."),
     NOT_FOUND_RECORD(HttpStatus.NOT_FOUND, "해당 유저의 레코드를 찾을 수 없습니다."),
+    NOT_FOUND_RESULT(HttpStatus.NOT_FOUND, "해당 유저의 멘토 매치 결과를 찾을 수 없습니다."),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류");
 

@@ -28,7 +28,7 @@ public class RecordService {
     public RecordPostResponse showRecords(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
-        Record record = recordRepository.findByUserId(userId)
+        Record record = recordRepository.findByUser_UserId(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
         return new RecordPostResponse(record);
     }
@@ -109,7 +109,7 @@ public class RecordService {
                 || thirdMentor.getMentorStatus() != MentorStatus.COMFIRMED)
             throw new CustomException(ExceptionCode.NOT_CONFIRMED_MENTOR);
 
-        Record record = recordRepository.findByUserId(userId)
+        Record record = recordRepository.findByUser_UserId(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
         record.update(user, firstMentor, secondMentor, thirdMentor, request.getDrink(), LocalDateTime.now());
 
@@ -142,7 +142,7 @@ public class RecordService {
     }
 
     public void deleteRecord(Long userId) {
-        Record record = recordRepository.findByUserId(userId)
+        Record record = recordRepository.findByUser_UserId(userId)
                         .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
         Long recordId = record.getRecordId();
         recordRepository.deleteById(recordId);
