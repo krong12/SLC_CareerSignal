@@ -1,10 +1,2625 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>멘토 매칭 웹사이트</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#181713">
+  <meta property="og:title" content="CareerSignal Mentor Matching">
+  <meta property="og:image" content="/assets/career-signal-share.png">
+  <title>CareerSignal | Mentor Matching</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap");
+
+/* ---------- 공통 색상과 기본 스타일 ---------- */
+:root {
+  --ink: #302e2a;
+  --muted: #77736c;
+  --paper: #eee8dc;
+  --card: #faf8f3;
+  --line: #cfc5b5;
+  --yellow: #efbf34;
+  --black: #181713;
+  --shadow: 0 16px 35px #2f271c1f
+}
+
+* {
+  box-sizing: border-box
+}
+
+html {
+  scroll-behavior: smooth
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow-x: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Manrope, "Noto Sans KR", sans-serif
+}
+
+button,
+input {
+  font: inherit
+}
+
+button {
+  color: inherit;
+  cursor: pointer
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .035;
+  z-index: 30;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+}
+
+/* ---------- 상단 로그인 영역 ---------- */
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6vw;
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 5
+}
+
+.brand {
+  font: italic 22px "DM Serif Display", serif;
+  color: var(--yellow);
+  text-decoration: none
+}
+
+.top-btn {
+  border: 1px solid #ffffffb3;
+  color: #fff;
+  background: #04122859;
+  border-radius: 999px;
+  padding: 9px 16px;
+  backdrop-filter: blur(6px)
+}
+
+/* ---------- 선택한 1·2·3지망 멘토 영역 ---------- */
+.hero {
+  min-height: 490px;
+  margin: 0 3vw;
+  padding: 88px 5vw 42px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  background-color: var(--black);
+  background-image: radial-gradient(circle at 8% 12%, #efbf348c 0 1px, transparent 1.6px), radial-gradient(circle at 84% 25%, #ffffff59 0 1px, transparent 1.5px), repeating-linear-gradient(93deg, #00000047 0, #37342b2e 7%, #0f0e0c5c 14%);
+  background-size: 170px 140px, 220px 190px, 100% 100%;
+  box-shadow: inset 0 -30px 60px #00000040
+}
+
+.hero:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #0000004d, transparent 30%, transparent 70%, #0000004d);
+  pointer-events: none
+}
+
+.hero>* {
+  position: relative;
+  z-index: 2
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  font-size: 11px;
+  color: #d8cda8
+}
+
+/* 밝은 모달 위의 영문 소제목은 배경과 충분히 구분되도록 조금 더 진하게 표시합니다. */
+.dialog .eyebrow {
+  color: #836d38;
+  font-weight: 600;
+}
+
+.hero h1 {
+  font: italic 400 clamp(48px, 6vw, 78px)/1 "DM Serif Display", serif;
+  margin: 8px 0 12px;
+  color: var(--yellow);
+  text-shadow: 3px 4px #6c5210
+}
+
+.hero-copy {
+  max-width: 600px;
+  color: #ddd6c7;
+  font-size: 14px;
+  line-height: 1.8;
+  margin: 0 0 25px
+}
+
+.choices {
+  display: flex;
+  gap: 12px;
+  justify-content: center
+}
+
+.choice {
+  width: 140px;
+  height: 140px;
+  border: 1px solid #ffffff38;
+  border-radius: 50%;
+  background: #cabb8a center/cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  position: relative;
+  box-shadow: 5px 8px 9px #00000047
+}
+
+.choice.filled {
+  color: #fff;
+  overflow: hidden
+}
+
+.choice.filled:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(transparent 20%, #000000d1)
+}
+
+.choice>* {
+  position: relative
+}
+
+.choice b {
+  font-size: 11px;
+  color: #59470e
+}
+
+.choice.filled b {
+  color: var(--yellow)
+}
+
+.choice strong {
+  font-size: 15px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
+}
+
+.choice small {
+  font-size: 10px;
+  opacity: .8
+}
+
+.empty-plus {
+  font-size: 38px
+}
+
+.choice-remove {
+  position: absolute;
+  z-index: 3;
+  right: 2px;
+  top: 5px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--yellow);
+  font-weight: 700
+}
+
+.hero-note {
+  margin: 18px 0 0;
+  font-size: 11px;
+  color: #bdb6a8
+}
+
+/* ---------- 검색과 필터 ---------- */
+main {
+  padding: 42px 5vw 90px;
+  background-image: radial-gradient(#493e2e11 .7px, transparent .7px);
+  background-size: 5px 5px
+}
+
+.toolbar {
+  max-width: 1220px;
+  margin: 0 auto 28px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 15px;
+  align-items: center;
+  border-bottom: 1px solid #b6ab99;
+  padding-bottom: 18px
+}
+
+.search {
+  position: relative;
+  max-width: 500px
+}
+
+.search input {
+  width: 100%;
+  border: 0;
+  background: var(--black);
+  color: var(--yellow);
+  padding: 14px 50px 14px 20px;
+  border-radius: 13px;
+  outline: none
+}
+
+.search input::placeholder {
+  color: #d5cdbf
+}
+
+.search span {
+  position: absolute;
+  right: 18px;
+  top: 8px;
+  font-size: 25px;
+  color: var(--yellow)
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end
+}
+
+.chip {
+  border: 0;
+  background: var(--black);
+  color: var(--yellow);
+  border-radius: 13px;
+  padding: 12px 16px;
+  font-size: 12px
+}
+
+.chip:before {
+  content: "# ";
+  font-size: 15px
+}
+
+.chip:hover,
+.chip.active {
+  background: var(--yellow);
+  color: var(--black)
+}
+
+.result-meta {
+  grid-column: 1/-1;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center
+}
+
+.result-meta b {
+  color: var(--ink)
+}
+
+/* ---------- 멘토 목록 카드 ---------- */
+.mentor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1220px;
+  margin: auto
+}
+
+.mentor-card {
+  background: var(--card);
+  border: 1px solid #bfb5a4;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  transition: .25s;
+  animation: rise .45s both
+}
+
+.mentor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow)
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px)
+  }
+}
+
+.card-visual {
+  height: 150px;
+  background: #d8cfbf;
+  position: relative;
+  display: grid;
+  place-items: center
+}
+
+.avatar,
+.profile-photo {
+  border-radius: 50%;
+  background: #b9aa7a center/cover;
+  display: grid;
+  place-items: center;
+  font: 34px "DM Serif Display";
+  border: 4px solid #ffffffa6
+}
+
+.avatar {
+  width: 86px;
+  height: 86px
+}
+
+.rank-badge {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  background: var(--yellow);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700
+}
+
+.card-body {
+  padding: 22px;
+  display: flex;
+  flex: 1;
+  flex-direction: column
+}
+
+.card-body h2 {
+  font: 25px "DM Serif Display", "Noto Sans KR";
+  margin: 0 0 3px
+}
+
+.role {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0 0 16px
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px
+}
+
+.tag {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 8px;
+  font-size: 10px
+}
+
+.card-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #ded7cb
+}
+
+.status {
+  font-size: 10px;
+  color: #6e673f
+}
+
+.detail {
+  border: 0;
+  background: none;
+  font-size: 11px;
+  font-weight: 700
+}
+
+.empty {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 90px 20px;
+  color: var(--muted);
+  line-height: 1.8
+}
+
+/* ---------- 상세 정보, 로그인 창, 알림 메시지 ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(32, 29, 24, .48);
+  display: none;
+  place-items: center;
+  padding: 20px;
+  backdrop-filter: blur(8px)
+}
+
+.modal.open {
+  display: grid
+}
+
+.dialog {
+  width: min(620px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  border: 0;
+  border-radius: 30px;
+  background: var(--panel);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
+  position: relative;
+  padding: 35px
+}
+
+.close {
+  position: absolute;
+  right: 22px;
+  top: 20px;
+  border: 0;
+  background: transparent;
+  font-size: 25px
+}
+
+.profile-head {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 22px;
+  padding-right: 35px
+}
+
+.profile-photo {
+  width: 92px;
+  height: 92px;
+  flex: none
+}
+
+.dialog h2 {
+  font: 400 42px "DM Serif Display", "Noto Sans KR";
+  margin: 8px 0
+}
+
+.intro {
+  white-space: pre-line;
+  font-size: 13px;
+  line-height: 1.85;
+  color: #57534a;
+  border-top: 1px solid var(--line);
+  padding-top: 18px
+}
+
+.select-title {
+  font-size: 12px;
+  margin: 24px 0 9px
+}
+
+.rank-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px
+}
+
+.rank-action {
+  border: 1px solid var(--black);
+  background: transparent;
+  padding: 12px 7px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700
+}
+
+.rank-action:hover,
+.rank-action.selected {
+  background: var(--yellow);
+  border-color: var(--yellow)
+}
+
+.login-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 22px
+}
+
+.login-form input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+  padding: 15px;
+  outline: none
+}
+
+.primary {
+  border: 0;
+  border-radius: 6px;
+  background: var(--black);
+  color: var(--yellow);
+  padding: 14px 20px;
+  font-weight: 700
+}
+
+.login-support {
+  margin: 18px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px
+}
+
+.login-support a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 60;
+  transform: translate(-50%, 30px);
+  opacity: 0;
+  background: var(--black);
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: 999px;
+  font-size: 12px;
+  pointer-events: none;
+  transition: .25s;
+  box-shadow: var(--shadow)
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0)
+}
+
+/* ---------- 태블릿과 모바일 대응 ---------- */
+@media(max-width:900px) {
+  .mentor-grid {
+    grid-template-columns: repeat(2, 1fr)
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr
+  }
+
+  .filters {
+    justify-content: flex-start
+  }
+
+  .hero {
+    margin: 0
+  }
+
+  .choice {
+    width: 120px;
+    height: 120px
+  }
+}
+
+@media(max-width:580px) {
+  .topbar {
+    padding: 0 20px
+  }
+
+  .hero {
+    padding: 85px 18px 38px;
+    min-height: 520px
+  }
+
+  .hero h1 {
+    font-size: 46px
+  }
+
+  .choice {
+    width: 96px;
+    height: 96px;
+    padding: 9px
+  }
+
+  .choice strong {
+    font-size: 12px
+  }
+
+  .hero-copy {
+    font-size: 12px
+  }
+
+  .mentor-grid {
+    grid-template-columns: 1fr
+  }
+
+  .toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch
+  }
+
+  .filters {
+    overflow: auto;
+    flex-wrap: nowrap
+  }
+
+  .chip {
+    white-space: nowrap
+  }
+
+  .dialog {
+    padding: 28px 20px
+  }
+
+  .rank-actions {
+    grid-template-columns: 1fr
+  }
+
+  .top-btn {
+    font-size: 12px
+  }
+}
+
+/*
+ * 운영 중인 CareerSignal 메인 화면과 동일한 시각 체계입니다.
+ * 색상을 변경할 때는 아래 변수부터 수정하면 전체 화면에 함께 반영됩니다.
+ */
+:root {
+  --page: #ededed;
+  --panel: #f3f3f3;
+  --blue: #c0cad6;
+  --blue-dark: #596b7d;
+  --tag: #c3c8ce;
+  --white: #fdfdfd;
+  --text: #344252;
+}
+
+body,
+main {
+  background: var(--page);
+  color: var(--text);
+}
+
+.noise {
+  display: none;
+}
+
+.topbar {
+  top: 10px;
+  right: 22px;
+  left: auto;
+  width: auto;
+  height: 60px;
+  padding: 5px 7px;
+  border-radius: 999px;
+  background: rgba(20, 35, 55, .72);
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  display: none;
+}
+
+.login-btn,
+.nav-btn {
+  display: block;
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.login-btn {
+  color: var(--blue-dark);
+  background: var(--white);
+}
+
+.nav-btn {
+  color: var(--white);
+  background: transparent;
+}
+
+.nav-btn[hidden],
+.login-btn[hidden] {
+  display: none;
+}
+
+.user-greeting {
+  display: block;
+  border-radius: 999px;
+  padding: 10px 16px;
+  max-width: min(58vw, 280px);
+  overflow: hidden;
+  color: var(--blue-dark);
+  background: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-greeting[hidden] {
+  display: none;
+}
+
+.hero {
+  height: 300px;
+  min-height: 300px;
+  margin: 0;
+  padding: 58px 20px 22px;
+  align-items: stretch;
+  background: #071c38 url("/assets/curtain.png") center/cover no-repeat;
+  box-shadow: none;
+}
+
+.hero:after,
+.hero>.eyebrow,
+.hero-copy {
+  display: none;
+}
+
+.hero h1 {
+  position: absolute;
+  top: 92px;
+  left: 5vw;
+  width: min(390px, 40vw);
+  margin: 0;
+  font-size: 0;
+  text-shadow: none;
+}
+
+.hero-logo {
+  display: block;
+  width: 100%;
+}
+
+.matching-label {
+  display: block;
+  margin-top: 7px;
+  color: var(--white);
+  font: 500 clamp(12px, 1.1vw, 15px)/1.2 Manrope, "Noto Sans KR", sans-serif;
+  letter-spacing: .32em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.choices {
+  position: absolute;
+  top: 88px;
+  right: 5vw;
+  gap: 12px;
+}
+
+.choice {
+  width: 125px;
+  height: 125px;
+  margin-left: 0;
+  border: 2px solid rgba(255, 255, 255, .82);
+  border-radius: 22px;
+  color: var(--white);
+  background-color: rgba(89, 107, 125, .42);
+  background-image: none;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  box-shadow: none;
+}
+
+.choice:first-child {
+  margin-left: 0;
+}
+
+.choice.filled {
+  border: 2px solid var(--white);
+  border-radius: 22px;
+  background-color: #71849a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.choice.filled:before {
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.choice-photo {
+  position: absolute;
+  inset: 7px;
+  z-index: 0;
+  width: calc(100% - 14px);
+  height: calc(100% - 14px);
+  border-radius: 15px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.choice.filled>b,
+.choice.filled>strong,
+.choice.filled>small,
+.choice.filled>.choice-remove {
+  z-index: 2;
+}
+
+.choice-number {
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.choice-remove {
+  right: 3px;
+  top: 3px;
+  color: var(--blue-dark);
+  background: var(--white);
+}
+
+.choice.filled b {
+  color: var(--white);
+}
+
+.hero-note {
+  position: absolute;
+  right: 34px;
+  bottom: 22px;
+  color: var(--white);
+}
+
+.preference-controls {
+  position: absolute;
+  top: 88px;
+  right: 5vw;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.preference-controls .choices {
+  position: static;
+}
+
+.matching-actions {
+  display: flex;
+  min-width: 126px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+
+.record-submit,
+.record-detail-button {
+  border: 1px solid var(--white);
+  border-radius: 999px;
+  padding: 11px 18px;
+  color: var(--blue-dark);
+  background: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.record-submit:disabled {
+  border-color: rgba(255, 255, 255, .28);
+  color: rgba(255, 255, 255, .58);
+  background: rgba(113, 132, 154, .48);
+  cursor: not-allowed;
+}
+
+.record-detail-button {
+  color: var(--white);
+  background: var(--blue-dark);
+}
+
+.record-detail-button[hidden] {
+  display: none;
+}
+
+.record-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.record-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.record-summary-card {
+  min-width: 0;
+  padding: 12px 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--blue-dark);
+  background: var(--white);
+  text-align: center;
+}
+
+.record-summary-card b,
+.record-summary-card strong,
+.record-summary-card small {
+  display: block;
+}
+
+.record-summary-card b {
+  margin-bottom: 3px;
+  font-size: 11px;
+}
+
+.record-summary-card strong {
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-summary-card small {
+  margin-top: 2px;
+  overflow: hidden;
+  color: #68727e;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--blue-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.record-form textarea,
+.record-form select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 13px 15px;
+  color: var(--text);
+  background: var(--white);
+  font: inherit;
+}
+
+.record-form textarea {
+  min-height: 74px;
+  resize: vertical;
+}
+
+.record-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.record-actions .primary {
+  flex: 1;
+}
+
+.submission-warning {
+  margin: 16px 0 0;
+  border: 1px solid #d8c7ad;
+  border-radius: 12px;
+  padding: 11px 14px;
+  color: #7f4e3e;
+  background: #f7eee4;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.form-status {
+  min-height: 20px;
+  margin: 10px 0 0;
+  color: var(--blue-dark);
+  font-size: 12px;
+  text-align: center;
+}
+
+.form-status.error {
+  color: #9a4444;
+}
+
+.record-delete {
+  border: 1px solid #cbd2d9;
+  border-radius: 999px;
+  padding: 13px 19px;
+  color: #9a4444;
+  background: var(--white);
+}
+
+main {
+  padding: 40px 3.3vw 90px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  max-width: 1280px;
+  border: 0;
+  margin-bottom: 8px;
+  padding: 0;
+  gap: 10px;
+}
+
+.filter-reset,
+.saved-filter,
+.structured-filters summary {
+  height: 58px;
+  border: 1px solid #cbd2d9;
+  border-radius: 13px;
+  white-space: nowrap;
+}
+
+.filter-reset,
+.saved-filter {
+  flex: 0 0 auto;
+  padding: 0 15px;
+  color: var(--blue-dark);
+  background: var(--panel);
+  font-weight: 700;
+}
+
+.saved-filter.active {
+  border-color: var(--blue-dark);
+  color: var(--white);
+  background: var(--blue-dark);
+  box-shadow: inset 0 0 0 2px var(--white);
+}
+
+.saved-filter span {
+  display: inline-grid;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  padding: 0 5px;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--blue-dark);
+  background: rgba(255, 255, 255, .8);
+  font-size: 11px;
+}
+
+.structured-filters {
+  display: flex;
+  gap: 9px;
+}
+
+.filter-group {
+  position: relative;
+}
+
+.filter-group summary {
+  min-width: 112px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 0;
+  color: var(--white);
+  background: var(--tag);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.filter-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.filter-group summary:after {
+  content: "＋";
+}
+
+.filter-group[open] summary {
+  background: var(--blue-dark);
+  box-shadow: inset 0 0 0 2px var(--white);
+}
+
+.filter-group[open] summary:after {
+  content: "−";
+}
+
+.filter-options {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 8px);
+  z-index: 30;
+  width: min(620px, 88vw);
+  max-height: 55vh;
+  overflow: auto;
+  padding: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 1px solid #cbd2d9;
+  border-radius: 14px;
+  background: var(--panel);
+  box-shadow: 0 16px 35px rgba(52, 66, 82, .2);
+}
+
+.filter-option {
+  position: relative;
+}
+
+.filter-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filter-option span {
+  display: block;
+  padding: 8px 12px;
+  border: 1px solid #cbd2d9;
+  border-radius: 999px;
+  background: var(--white);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filter-option input:checked+span {
+  border-color: var(--blue-dark);
+  color: var(--white);
+  background: var(--blue-dark);
+}
+
+.chip,
+.search input {
+  height: 58px;
+  border: 0;
+  border-radius: 13px;
+  color: var(--white);
+  background: var(--tag);
+}
+
+.chip {
+  min-width: 86px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.chip:hover,
+.chip.active {
+  color: var(--white);
+  background: var(--blue-dark);
+}
+
+.chip.active {
+  box-shadow: inset 0 0 0 2px var(--white);
+}
+
+.search {
+  order: 4;
+  flex: 1 1 330px;
+  min-width: 240px;
+  max-width: 430px;
+  width: 430px;
+  margin-left: auto;
+}
+
+.filter-reset {
+  order: 1;
+}
+
+.structured-filters {
+  order: 2;
+}
+
+.saved-filter {
+  order: 3;
+}
+
+.result-meta {
+  order: 5;
+  flex: 1 1 100%;
+  max-width: 1280px;
+  margin-top: 0;
+  text-align: right;
+}
+
+.save-button {
+  position: absolute;
+  z-index: 2;
+  top: 8px;
+  right: 14px;
+  border: 0;
+  color: var(--white);
+  background: transparent;
+  font-size: 34px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+}
+
+.save-button.active {
+  color: #e5484d;
+}
+
+.search input {
+  padding: 0 24px 0 58px;
+  font-size: 15px;
+}
+
+.search input::placeholder {
+  color: rgba(255, 255, 255, .8);
+}
+
+.search button {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  transform: translateY(-52%);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.search button svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.result-meta {
+  color: var(--blue-dark);
+}
+
+/* 투표 화면과 같이 검색 도구 아래, 카드 목록 위에 결과 수를 배치합니다. */
+.filter-result {
+  max-width: 1280px;
+  margin: 0 auto 24px;
+  text-align: right;
+}
+
+.mentor-grid {
+  max-width: 1800px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+  gap: clamp(14px, 2.4vw, 32px);
+}
+
+.mentor-card {
+  min-height: 0;
+  border: 0;
+  background: var(--panel);
+  box-shadow: none;
+}
+
+.mentor-card:hover {
+  box-shadow: 0 12px 25px rgba(89, 107, 125, .14);
+}
+
+.card-visual {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 5/2;
+  background-color: var(--blue);
+  background-position: center;
+  background-size: cover;
+}
+
+.avatar {
+  background-color: transparent;
+  border: 0;
+  color: transparent;
+}
+
+.avatar:not([style*="background-image"]) {
+  background: url("/assets/profile-placeholder.png") center/contain no-repeat;
+}
+
+/* 투표 화면에서 사용하던 가로형 명함 레이아웃을 상세 화면에도 사용합니다. */
+.detail-dialog {
+  width: min(960px, 96vw);
+  aspect-ratio: 1.618/1;
+  padding: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.detail-dialog #detailContent,
+.detail-dialog .business-card {
+  width: 100%;
+  height: 100%;
+}
+
+.detail-dialog .business-card {
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: 34% 66%;
+}
+
+.detail-dialog .close {
+  z-index: 3;
+  top: 14px;
+  right: 18px;
+}
+
+.detail-dialog .profile-photo {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--blue);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.detail-dialog .profile-info {
+  min-width: 0;
+  padding: 38px 48px 30px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.detail-dialog .profile-info h2 {
+  margin: 6px 0 14px;
+  color: var(--text);
+}
+
+.labeled-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.labeled-tag {
+  padding: 8px 10px;
+  border: 1px solid #d5dce2;
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--white);
+  font-size: 14px;
+}
+
+.labeled-tag b {
+  margin-right: 6px;
+  color: var(--blue-dark);
+  font-size: 11px;
+}
+
+.profile-sections {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 12px;
+}
+
+.profile-section {
+  min-height: 0;
+  padding: 12px 15px;
+}
+
+.profile-section h3 {
+  margin: 0 0 5px;
+  color: var(--blue-dark);
+  font-size: 13px;
+}
+
+.profile-section p {
+  margin: 0;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.profile-section.bio {
+  border-left: 4px solid var(--blue-dark);
+  background: var(--white);
+}
+
+.profile-section.quote {
+  border-top: 1px solid #d5dce2;
+  color: #65717e;
+  background: transparent;
+  font-size: 13px;
+}
+
+.detail-vote-count {
+  margin: 4px 0 10px;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.detail-dialog .select-title {
+  margin: auto 0 8px;
+}
+
+.rank-badge {
+  color: var(--white);
+  background: var(--blue-dark);
+}
+
+.tag {
+  border: 0;
+  border-radius: 13px;
+  padding: 9px 13px;
+  color: var(--white);
+  background: var(--tag);
+}
+
+.card-foot {
+  border-color: #d7dce1;
+}
+
+.card-rank-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.card-rank-button {
+  min-height: 36px;
+  border: 1px solid #cbd2d9;
+  border-radius: 8px;
+  color: var(--blue-dark);
+  background: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.card-rank-button:hover,
+.card-rank-button.selected {
+  border-color: var(--blue-dark);
+  color: var(--white);
+  background: var(--blue-dark);
+}
+
+.card-rank-button:disabled,
+.rank-action:disabled {
+  cursor: not-allowed;
+  opacity: .58;
+}
+
+.card-rank-button.selected:disabled,
+.rank-action.selected:disabled {
+  opacity: 1;
+}
+
+.status {
+  color: var(--blue-dark);
+}
+
+.primary,
+.rank-action:hover,
+.rank-action.selected {
+  color: var(--white);
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+}
+
+.login-form .primary {
+  border: 1px solid var(--blue-dark);
+  border-radius: 999px;
+  padding: 13px 19px;
+  color: var(--white);
+  background: var(--blue-dark);
+}
+
+@media(max-width:980px) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .structured-filters {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .search {
+    flex-basis: 100%;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+  }
+
+  .filter-result {
+    text-align: left;
+  }
+
+  .hero h1 {
+    width: min(330px, 38vw);
+  }
+
+  .preference-controls {
+    top: 100px;
+    right: 4vw;
+  }
+}
+
+@media(max-width:700px) {
+  .structured-filters {
+    order: 2;
+    max-width: calc(100vw - 125px);
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+
+  .filter-reset,
+  .saved-filter {
+    height: 42px;
+    padding: 0 11px;
+  }
+
+  .search {
+    order: 4;
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .detail-dialog {
+    width: min(96vw, 620px);
+    aspect-ratio: auto;
+    max-height: 92vh;
+  }
+
+  .detail-dialog .business-card {
+    min-height: 560px;
+    grid-template-columns: 32% 68%;
+  }
+
+  .detail-dialog .profile-info {
+    padding: 42px 18px 20px;
+  }
+
+  .detail-dialog .profile-info h2 {
+    font-size: 30px;
+  }
+
+  .detail-dialog .labeled-tags {
+    gap: 6px;
+  }
+
+  .detail-dialog .labeled-tag {
+    padding: 6px;
+    font-size: 11px;
+  }
+}
+
+@media(max-width:760px) {
+  .hero {
+    height: auto;
+    min-height: 285px;
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    padding: 72px 14px 24px;
+  }
+
+  .choice {
+    width: min(105px, calc((100vw - 52px) / 3));
+    height: min(105px, calc((100vw - 52px) / 3));
+    margin-left: 0;
+  }
+
+  .hero h1 {
+    position: static;
+    width: min(330px, calc(100vw - 40px));
+    margin: 0 auto 16px;
+    transform: none;
+  }
+
+  .preference-controls {
+    position: static;
+    width: 100%;
+    margin: 0;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    transform: none;
+  }
+
+  .preference-controls .choices {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .hero-note {
+    right: 14px;
+    bottom: 10px;
+    max-width: calc(100vw - 28px);
+    line-height: 1.45;
+  }
+
+  .matching-actions {
+    width: 100%;
+    min-width: 0;
+    flex-direction: row;
+    margin: 0 auto;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .filter-result {
+    margin-bottom: 18px;
+  }
+
+  .topbar {
+    right: 8px;
+    max-width: calc(100vw - 16px);
+    padding: 5px 7px;
+  }
+
+  .top-actions {
+    gap: 5px;
+  }
+
+  .nav-btn {
+    padding-inline: 9px;
+  }
+
+  .user-greeting {
+    max-width: 52vw;
+    padding-inline: 12px;
+  }
+
+  .record-summary {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
 </head>
 <body>
-<h1>hello</h1>
-</body>
-</html>
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a class="brand" href="/matching/">CareerSignal</a>
+    <div class="top-actions">
+      <button class="nav-btn" id="adminButton" type="button" hidden>관리자</button>
+      <button class="nav-btn" id="logoutButton" type="button" hidden>로그아웃</button>
+      <button class="login-btn" id="loginButton" type="button">로그인</button>
+      <span class="user-greeting" id="userGreeting" hidden></span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <span class="eyebrow">Mentor matching · 2026</span>
+    <h1>
+      <img class="hero-logo" src="/assets/career-signal-logo.png" alt="Career Signal">
+      <span class="matching-label">Matching</span>
+    </h1>
+    <p class="hero-copy">
+      함께하고 싶은 멘토를 우선순위에 따라 선택해 주세요.<br>
+      1지망부터 3지망까지 선택할 수 있으며 언제든 변경할 수 있습니다.
+    </p>
+    <div class="preference-controls">
+      <div class="matching-actions">
+        <button class="record-submit" id="recordOpen" type="button" disabled>최종 제출</button>
+        <button class="record-detail-button" id="recordDetailsOpen" type="button" hidden>음료·질문 입력</button>
+      </div>
+      <div class="choices" id="choices"></div>
+    </div>
+    <p class="hero-note">
+      <b id="selectedCount">0</b>/3 선택 완료 · 선택한 카드를 누르면 프로필을 확인할 수 있어요
+    </p>
+  </section>
+
+  <main id="mentorList">
+    <section class="toolbar">
+      <button class="filter-reset" id="filterReset" type="button">전체 초기화</button>
+      <div class="structured-filters" id="structuredFilters"></div>
+      <button class="saved-filter" id="savedFilter" type="button" aria-pressed="false">
+        ♥ 찜한 멘토 <span id="savedCount">0</span>
+      </button>
+      <div class="search">
+        <input id="searchInput" type="search" placeholder="이름, 회사, 직무를 검색하세요" aria-label="멘토 검색">
+        <button id="searchButton" type="button" aria-label="검색">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"></circle>
+            <path d="m15.5 15.5 5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </div>
+    </section>
+    <div class="result-meta filter-result">
+      <b id="resultCount">0</b>명의 매칭 가능 멘토를 발견했어요
+    </div>
+    <section class="mentor-grid" id="mentorGrid" aria-live="polite"></section>
+  </main>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true">
+    <div class="dialog detail-dialog">
+      <button class="close" data-close="detailModal" aria-label="프로필 닫기">×</button>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="loginModal" role="dialog" aria-modal="true">
+    <article class="dialog">
+      <button class="close" data-close="loginModal" aria-label="로그인 창 닫기">×</button>
+      <div class="eyebrow">Welcome</div>
+      <h2>시그널을 보낼 준비가 됐나요?</h2>
+      <p class="intro">학번과 PRISM에서 발급해 준 패스코드로 로그인해주세요.</p>
+      <form class="login-form" id="loginForm">
+        <input name="studentId" inputmode="numeric" autocomplete="username" placeholder="학번" required>
+        <input name="passCode" type="password" autocomplete="current-password" placeholder="PRISM 패스코드" required>
+        <button class="primary" type="submit">로그인</button>
+      </form>
+      <p class="login-support">
+        문의는
+        <a href="https://www.instagram.com/samsungleadersclub" target="_blank" rel="noreferrer">삼성리더스클럽 인스타그램 DM</a>으로 보내주세요.
+      </p>
+    </article>
+  </div>
+
+  <div class="modal" id="finalConfirmModal" role="dialog" aria-modal="true">
+    <article class="dialog">
+      <button class="close" data-close="finalConfirmModal" aria-label="최종 제출 확인 창 닫기">×</button>
+      <div class="eyebrow">Final preferences</div>
+      <h2>지망 최종 제출</h2>
+      <p class="intro">아래 순서로 지망을 제출합니다. 제출 후 음료와 질문을 별도로 입력할 수 있습니다.</p>
+      <div class="record-summary" id="finalSummary" aria-label="최종 제출할 멘토 순서"></div>
+      <form id="finalForm">
+        <p class="submission-warning" role="alert">최종 제출 후에는 지망을 수정할 수 없습니다.</p>
+        <div class="record-actions">
+          <button class="primary" type="submit" id="finalSave">이 순서로 최종 제출</button>
+        </div>
+        <p class="form-status" id="finalStatus" role="status" aria-live="polite"></p>
+      </form>
+    </article>
+  </div>
+
+  <div class="modal" id="recordModal" role="dialog" aria-modal="true">
+    <article class="dialog">
+      <button class="close" data-close="recordModal" aria-label="음료 및 질문 입력 창 닫기">×</button>
+      <div class="eyebrow">Additional information</div>
+      <h2 id="recordTitle">음료 및 질문 입력</h2>
+      <p class="intro">최종 제출한 지망별 질문과 희망 음료를 입력해 주세요.</p>
+      <div class="record-summary" id="recordSummary" aria-label="선택한 멘토 순서"></div>
+      <form class="record-form" id="recordForm">
+        <label>희망 음료
+          <select name="drink" required>
+            <option value="NOMATTER">상관없음</option>
+            <option value="WATER">물</option>
+            <option value="AMERICANO">아메리카노</option>
+            <option value="ICETEA">아이스티</option>
+            <option value="TEA">차</option>
+          </select>
+        </label>
+        <label><span id="firstQuestionLabel">1지망 질문</span>
+          <textarea name="firstQuestion" placeholder="선택 사항입니다."></textarea>
+        </label>
+        <label><span id="secondQuestionLabel">2지망 질문</span>
+          <textarea name="secondQuestion" placeholder="선택 사항입니다."></textarea>
+        </label>
+        <label><span id="thirdQuestionLabel">3지망 질문</span>
+          <textarea name="thirdQuestion" placeholder="선택 사항입니다."></textarea>
+        </label>
+        <div class="record-actions">
+          <button class="primary" type="submit" id="recordSave">음료·질문 저장</button>
+          <button class="record-delete" type="button" id="recordDelete" hidden>제출 삭제</button>
+        </div>
+      </form>
+    </article>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+const $ = (s, p = document) => p.querySelector(s),
+  $$ = (s, p = document) => [...p.querySelectorAll(s)];
+
+// -----------------------------------------------------------------------------
+// 화면 상태와 여러 기능에서 공통으로 사용하는 함수
+// -----------------------------------------------------------------------------
+const state = {
+    mentors: [],
+    filteredMentors: null,
+    // 배열 위치 자체가 1·2·3지망을 뜻합니다. 비어 있는 자리는 null로 유지합니다.
+    selected: [null, null, null],
+    saved: new Set(),
+    filters: {
+      majors: new Set(),
+      careers: new Set(),
+      fields: new Set(),
+      foreign: new Set()
+    },
+    showSavedOnly: false,
+    loggedIn: false,
+    isAdmin: false,
+    user: null,
+    recordExists: false,
+    recordDirty: false,
+    recordDrink: "NOMATTER",
+    recordQuestions: ["", "", ""],
+    query: "",
+    filter: "all"
+  },
+  ranks = ["1지망", "2지망", "3지망"];
+const orderKey = "career-signal-matching-order";
+const userStorageKey = "career-signal-login-user";
+const fieldLabels = {
+  SEMICONDUCTOR: "반도체", DISPLAY: "디스플레이", AI: "AI", SW: "SW",
+  ELECTRONICS: "전자", MACHINERY: "기계", AUTOMOTIVE: "자동차",
+  BIOTECHNOLOGY: "바이오", CHEMICALS: "화학", ENERGY: "에너지",
+  FINANCE: "금융", CONSULTING: "컨설팅", MARKETING: "마케팅",
+  EDUCATION: "교육", LEGAL_SERVICE: "법률", HEALTHCARE: "의료",
+  PUBLIC_INSTITUTION: "공공기관", RESEARCH_INSTITUTION: "연구기관",
+  STARTUP: "스타트업", ETC: "기타"
+};
+const careerLabels = {
+  COMPANY: "기업 재직", MASTER: "대학원 재학", RESEARCH: "연구",
+  PUBLIC: "공공기관", CEO: "창업", FREELANCER: "프리랜서",
+  PREPARING: "준비 중", ETC: "기타"
+};
+const areaLabels = {
+  CAPITAL_AREA: "수도권", NON_CAPITAL_AREA: "수도권 외", FOREIGN: "해외"
+};
+const esc = (v = "") => String(v ?? "").replace(/[&<>'"]/g, c => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  "'": "&#39;",
+  '"': "&quot;"
+} [c]));
+const name = v => v && typeof v === "object" ? (v.majorName || v.name || Object.values(v)[0] ||
+  "") : String(v || ""),
+  names = v => (Array.isArray(v) ? v : []).map(name);
+const photo = m => m?.profileImagePath && m.profileRelease ?
+  `/files/view/${encodeURIComponent(m.profileImagePath)}` : "";
+
+// 카드 이미지는 운영 메인 화면과 동일하게 가로 이미지를 우선 사용합니다.
+const cardImage = mentor => mentor?.cardImagePath ?
+  `/files/view/${encodeURIComponent(mentor.cardImagePath)}` : "";
+async function api(path, opt = {}) {
+  const cfg = {
+    credentials: "same-origin",
+    ...opt
+  };
+  if (opt.body) cfg.headers = {
+    "Content-Type": "application/json",
+    ...(opt.headers || {})
+  };
+  const res = await fetch(path, cfg);
+  if (!res.ok) {
+    let msg = "요청을 처리하지 못했습니다.", code;
+    try {
+      const d = await res.json();
+      msg = d.message || d.error || msg;
+      code = d.code
+    } catch (_) {}
+    const e = new Error(msg);
+    e.status = res.status;
+    e.code = code;
+    throw e
+  }
+  if (res.status === 204) return null;
+  return (res.headers.get("content-type") || "").includes("json") ? res.json() : res.text()
+}
+
+// -----------------------------------------------------------------------------
+// 알림 메시지와 화면 렌더링
+// -----------------------------------------------------------------------------
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => t.classList.remove("show"), 2500)
+}
+const mentor = id => state.mentors.find(m => Number(m.mentorId) === Number(id));
+
+function renderChoices() {
+  const selectionLocked = state.recordExists && !state.recordDirty;
+  $("#choices").innerHTML = [0, 1, 2].map(i => {
+    const m = mentor(state.selected[i]);
+    if (!m) return `<button class="choice" data-explore aria-label="${ranks[i]} 멘토 선택"><span class="choice-number">${i+1}</span></button>`;
+    const img = photo(m) || "/assets/profile-placeholder.png";
+    const removeButton = selectionLocked ? "" :
+      `<button class="choice-remove" data-remove="${m.mentorId}" aria-label="선택 취소">×</button>`;
+    return `<div class="choice filled" data-detail="${m.mentorId}"><img class="choice-photo" src="${img}" alt="${esc(m.alias||m.name)} 프로필">${removeButton}<b>${ranks[i]}</b><strong>${esc(m.alias||m.name)}</strong><small>${esc(m.companyName||m.job||"")}</small></div>`
+  }).join("");
+  const selectedCount = state.selected.filter(Boolean).length;
+  $("#selectedCount").textContent = selectedCount;
+  $("#recordOpen").disabled = selectedCount !== 3 || (state.recordExists && !state.recordDirty);
+  $("#recordOpen").textContent = selectedCount !== 3 ? "최종 제출" :
+    (state.recordExists && !state.recordDirty ? "제출 완료" :
+      (state.recordExists ? "변경한 지망 제출" : "최종 제출"));
+  $("#recordDetailsOpen").hidden = !state.recordExists || state.recordDirty
+}
+
+function visible(m) {
+  const blob = [m.alias, m.name, m.companyName, m.job, m.areaName, m.careerPath, ...names(m.major),
+    ...names(m.field)
+  ].join(" ").toLowerCase();
+  return blob.includes(state.query.toLowerCase())
+}
+
+function renderMentors() {
+  const filteredSource = state.filteredMentors || state.mentors;
+  const source = state.showSavedOnly ?
+    filteredSource.filter(m => state.saved.has(Number(m.mentorId))) : filteredSource;
+  const list = source.filter(visible);
+  const selectionLocked = state.recordExists && !state.recordDirty;
+  $("#resultCount").textContent = list.length;
+  $("#mentorGrid").innerHTML = list.length ? list.map((m, i) => {
+    const rank = state.selected.indexOf(Number(m.mentorId)),
+      img = photo(m),
+      wideImage = cardImage(m);
+    const rankButtons = ranks.map((label, rankIndex) =>
+      `<button class="card-rank-button ${rank===rankIndex?"selected":""}" data-rank="${rankIndex}" data-mentor="${m.mentorId}" ${selectionLocked?"disabled":""}>${label}</button>`
+    ).join("");
+    const isSaved = state.saved.has(Number(m.mentorId));
+    const avatar = wideImage ? "" :
+      `<div class="avatar" style="${img?`background-image:url('${img}')`:""}">${img?"":esc((m.alias||m.name||"M")[0])}</div>`;
+    return `<article class="mentor-card" style="animation-delay:${Math.min(i*.04,.3)}s"><div class="card-visual" style="${wideImage?`background-image:url('${wideImage}')`:""}">${rank>=0?`<span class="rank-badge">${ranks[rank]} 선택</span>`:""}<button class="save-button ${isSaved?"active":""}" data-save="${m.mentorId}" aria-label="${isSaved?"관심 멘토에서 삭제":"관심 멘토로 저장"}" aria-pressed="${isSaved}">${isSaved?"♥":"♡"}</button>${avatar}</div><div class="card-body"><h2>${esc(m.alias||m.name)}</h2><p class="role">${esc(m.companyName||"Independent")} · ${esc(m.job||"Mentor")}</p><div class="tags">${[...names(m.major),...names(m.field).map(value=>fieldLabels[value]||value),careerLabels[name(m.careerPath)]||name(m.careerPath)].filter(Boolean).slice(0,4).map(v=>`<span class="tag"># ${esc(v)}</span>`).join("")}</div><div class="card-foot"><span class="status">● 매칭 가능</span><button class="detail" data-detail="${m.mentorId}">프로필 보기 →</button></div><div class="card-rank-actions" aria-label="${esc(m.alias||m.name)} 지망 선택">${rankButtons}</div></div></article>`
+  }).join("") : `<div class="empty">조건에 맞는 멘토를 찾지 못했어요.<br>다른 검색어나 필터를 사용해 보세요.</div>`
+  $("#savedCount").textContent = state.saved.size;
+  $("#savedFilter").classList.toggle("active", state.showSavedOnly);
+  $("#savedFilter").setAttribute("aria-pressed", String(state.showSavedOnly))
+}
+
+function render() {
+  renderChoices();
+  renderMentors()
+}
+
+// 세 명을 모두 제출하기 전까지의 선택 순서는 브라우저에 임시 보관합니다.
+// 제출된 순서는 /record 응답의 first/second/thirdMentorId로 다시 불러옵니다.
+function saveOrder() {
+  try {
+    localStorage.setItem(orderKey, JSON.stringify(state.selected))
+  } catch (_) {}
+}
+
+function storedOrder() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(orderKey) || "[]");
+    return [0, 1, 2].map(index => {
+      const id = Number(stored[index]);
+      return id || null
+    })
+  } catch (_) {
+    return [null, null, null]
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 멘토 상세 정보와 지망 선택·변경·취소
+// -----------------------------------------------------------------------------
+async function openDetail(id) {
+  const m = mentor(id);
+  if (!m) return;
+  const current = state.selected.indexOf(Number(id)),
+    img = photo(m);
+  let voteCount = null;
+  try {
+    voteCount = await api(`/vote/mentor/${m.mentorId}`)
+  } catch (_) {}
+  const tags = [
+    ["전공", names(m.major).join(" · ")],
+    ["직장명", m.companyName],
+    ["직무", m.job],
+    ["전문 분야", names(m.field).map(value => fieldLabels[value] || value).join(" · ")],
+    ["직업 유형", careerLabels[name(m.careerPath)] || name(m.careerPath)],
+    ["근무지 유형", areaLabels[name(m.area)] || m.areaName]
+  ];
+  const profileImage = img || "/assets/profile-placeholder.png";
+  const selectionLocked = state.recordExists && !state.recordDirty;
+  $("#detailContent").innerHTML =
+    `<div class="business-card"><div class="profile-photo" style="background-image:url('${profileImage}')" role="img" aria-label="${esc(m.alias||m.name)} 프로필 이미지"></div><div class="profile-info"><div class="eyebrow">Mentor profile</div><h2>${esc(m.alias||m.name)}</h2><div class="labeled-tags">${tags.filter(([,value])=>value).map(([label,value])=>`<span class="labeled-tag"><b>${label}</b># ${esc(value)}</span>`).join("")}</div><div class="profile-sections"><section class="profile-section bio"><h3>약력</h3><p>${esc(m.introduce||"등록된 약력이 없습니다.")}</p></section><section class="profile-section quote"><h3>멘토의 한 마디</h3><p>${esc(m.oneLine||"등록된 한 마디가 없습니다.")}</p></section></div>${voteCount!==null?`<p class="detail-vote-count">현재 받은 시그널 <b>${voteCount}</b>개</p>`:""}<p class="select-title">${selectionLocked?"최종 제출된 지망은 변경할 수 없습니다.":"희망 순위를 선택해 주세요"}</p><div class="rank-actions">${[0,1,2].map(i=>`<button class="rank-action ${current===i?"selected":""}" data-rank="${i}" data-mentor="${m.mentorId}" ${selectionLocked?"disabled":""}>${current===i?`${ranks[i]} 선택됨`:`${ranks[i]}으로 선택`}</button>`).join("")}</div></div></div>`;
+  $("#detailModal").classList.add("open")
+}
+
+function requireLogin() {
+  if (state.loggedIn) return true;
+  $("#detailModal").classList.remove("open");
+  $("#loginModal").classList.add("open");
+  toast("로그인 후 지망을 선택할 수 있어요.");
+  return false
+}
+function choose(id, rank) {
+  if (!requireLogin()) return;
+  if (state.recordExists && !state.recordDirty) {
+    toast("최종 제출한 지망은 변경할 수 없습니다.");
+    return
+  }
+  id = Number(id);
+  const oldRank = state.selected.indexOf(id);
+  // 같은 멘토가 다른 지망에 중복으로 남지 않도록 기존 자리만 비웁니다.
+  if (oldRank >= 0) {
+    state.selected[oldRank] = null;
+    state.recordQuestions[oldRank] = ""
+  }
+  state.selected[rank] = id;
+  state.recordQuestions[rank] = "";
+  state.recordDirty = true;
+  saveOrder();
+  render();
+  // 상세 모달 안에서 선택한 경우에만 상세 상태를 갱신합니다.
+  // 메인 카드의 지망 버튼은 선택만 처리하고 프로필 모달을 열지 않습니다.
+  if ($("#detailModal").classList.contains("open")) openDetail(id);
+  toast(`${ranks[rank]} 멘토로 선택했어요.`)
+}
+function remove(id) {
+  if (!requireLogin()) return;
+  if (state.recordExists && !state.recordDirty) {
+    toast("최종 제출한 지망은 변경할 수 없습니다.");
+    return
+  }
+  id = Number(id);
+  const rank = state.selected.indexOf(id);
+  if (rank >= 0) {
+    state.selected[rank] = null;
+    state.recordQuestions[rank] = ""
+  }
+  state.recordDirty = true;
+  saveOrder();
+  render();
+  $("#detailModal").classList.remove("open");
+  toast("선택을 취소했어요. 제출 전까지 서버에는 반영되지 않습니다.")
+}
+
+// -----------------------------------------------------------------------------
+// 최초 데이터 조회와 로그인·로그아웃
+// -----------------------------------------------------------------------------
+async function load() {
+  try {
+    const d = await api("/mentor/matching");
+    state.mentors = d.mentorList || [];
+    renderStructuredFilters()
+  } catch (e) {
+    toast("멘토 목록을 불러오지 못했습니다.")
+  }
+  render()
+}
+
+function filterOption(group, value, label) {
+  return `<label class="filter-option"><input type="checkbox" data-filter-group="${group}" value="${esc(value)}"><span>${esc(label)}</span></label>`
+}
+
+function renderStructuredFilters() {
+  const majors = [...new Set(state.mentors.flatMap(mentor => names(mentor.major)))].sort();
+  const fields = [...new Set(state.mentors.flatMap(mentor => names(mentor.field)))].sort();
+  const careers = [...new Set(state.mentors.map(mentor => name(mentor.careerPath)).filter(Boolean))].sort();
+  const groups = [
+    ["majors", "전공", majors.map(value => [value, value])],
+    ["careers", "직업 유형", careers.map(value => [value, careerLabels[value] || value])],
+    ["fields", "전문 분야", fields.map(value => [value, fieldLabels[value] || value])],
+    ["foreign", "해외 경험", [["true", "해외 경험 유"], ["false", "해외 경험 무"]]]
+  ];
+  $("#structuredFilters").innerHTML = groups.map(([key, title, options]) =>
+    `<details class="filter-group"><summary>${title}</summary><div class="filter-options">${options.map(([value,label])=>filterOption(key,value,label)).join("")}</div></details>`
+  ).join("")
+}
+
+async function resetFilters() {
+  Object.values(state.filters).forEach(filter => filter.clear());
+  state.showSavedOnly = false;
+  $$("#structuredFilters input").forEach(input => input.checked = false);
+  state.filteredMentors = null;
+  renderMentors()
+}
+
+async function applyStructuredFilter(input) {
+  const filter = state.filters[input.dataset.filterGroup];
+  input.checked ? filter.add(input.value) : filter.delete(input.value);
+  await searchMatchingMentors()
+}
+
+// API 명세의 파라미터 이름으로 선택값을 반복해서 전달합니다.
+async function searchMatchingMentors() {
+  const params = new URLSearchParams();
+  const parameterNames = {
+    majors: "majorNames",
+    careers: "careerPaths",
+    fields: "fields",
+    foreign: "foreignSchools"
+  };
+  Object.entries(state.filters).forEach(([group, values]) => {
+    values.forEach(value => params.append(parameterNames[group], value))
+  });
+
+  if (!params.size) {
+    state.filteredMentors = null;
+    renderMentors();
+    return
+  }
+
+  try {
+    const data = await api(`/mentorSearch/matching?${params.toString()}`);
+    state.filteredMentors = data.searchedMentors || [];
+    renderMentors()
+  } catch (error) {
+    toast(error.message || "필터 결과를 불러오지 못했습니다.")
+  }
+}
+
+async function toggleFavorite(id) {
+  if (!requireLogin()) return;
+  const mentorId = Number(id);
+  try {
+    if (state.saved.has(mentorId)) {
+      await api(`/favorite/${mentorId}`, {method: "DELETE"});
+      state.saved.delete(mentorId);
+      toast("관심 멘토에서 삭제했습니다.")
+    } else {
+      await api("/favorite", {method: "POST", body: JSON.stringify({mentorId})});
+      state.saved.add(mentorId);
+      toast("관심 멘토로 저장했습니다.")
+    }
+    renderMentors()
+  } catch (error) {
+    toast(error.message)
+  }
+}
+
+function recordDraftKey() {
+  const owner = state.user?.userId || state.user?.studentId || "session";
+  return `career-signal-matching-record-${owner}`
+}
+
+function storedRecordDetails() {
+  try {
+    return JSON.parse(localStorage.getItem(recordDraftKey()) || "null")
+  } catch (_) {
+    return null
+  }
+}
+
+function saveRecordDetails() {
+  try {
+    localStorage.setItem(recordDraftKey(), JSON.stringify({
+      mentorIds: state.selected,
+      questions: state.recordQuestions,
+      drink: state.recordDrink
+    }))
+  } catch (_) {}
+}
+
+function applyRecord(record) {
+  state.recordExists = true;
+  state.recordDirty = false;
+  state.recordDrink = record.drink || "NOMATTER";
+  state.selected = [record.firstMentorId, record.secondMentorId, record.thirdMentorId]
+    .map(value => Number(value) || null);
+  const draft = storedRecordDetails();
+  if (draft?.mentorIds?.every((id, index) => Number(id) === state.selected[index])) {
+    state.recordQuestions = [0, 1, 2].map(index => String(draft.questions?.[index] || ""))
+  } else {
+    state.recordQuestions = ["", "", ""]
+  }
+  saveOrder()
+}
+
+async function loadRecord() {
+  try {
+    applyRecord(await api("/record"))
+  } catch (_) {
+    state.recordExists = false;
+    state.recordDirty = state.selected.some(Boolean);
+    state.recordDrink = "NOMATTER";
+    state.recordQuestions = ["", "", ""];
+    state.selected = storedOrder()
+  }
+}
+
+function recordSummaryMarkup() {
+  return state.selected.map((id, index) => {
+    const selectedMentor = mentor(id);
+    return `<div class="record-summary-card"><b>${ranks[index]}</b><strong>${esc(selectedMentor?.alias || selectedMentor?.name || "멘토")}</strong><small>${esc(selectedMentor?.companyName || selectedMentor?.job || "")}</small></div>`
+  }).join("")
+}
+
+function openFinalConfirm() {
+  if (!requireLogin()) return;
+  if (state.selected.some(id => !id)) {
+    toast("1·2·3지망 멘토를 모두 선택해 주세요.");
+    return
+  }
+  $("#finalSummary").innerHTML = recordSummaryMarkup();
+  $("#finalStatus").textContent = "";
+  $("#finalStatus").classList.remove("error");
+  $("#finalConfirmModal").classList.add("open")
+}
+
+async function sendFinalRecord(payload, wasUpdate) {
+  return api("/record", {
+    method: wasUpdate ? "PATCH" : "POST",
+    body: JSON.stringify(payload)
+  })
+}
+
+// 화면에 저장된 상태가 오래되었더라도 실제 서버 기록을 기준으로 POST/PATCH를 결정합니다.
+async function recordAlreadyExists() {
+  if (state.recordExists) return true;
+  try {
+    await api("/record");
+    return true
+  } catch (error) {
+    if (error.status === 404 || error.code === "NOT_FOUND_RECORD") return false;
+    throw error
+  }
+}
+
+async function submitFinalRecord(event) {
+  event?.preventDefault();
+  if (state.selected.some(id => !id)) return;
+  const button = $("#finalSave"),
+    status = $("#finalStatus"),
+    payload = {
+      firstMentorId: state.selected[0],
+      firstQuestion: "",
+      secondMentorId: state.selected[1],
+      secondQuestion: "",
+      thirdMentorId: state.selected[2],
+      thirdQuestion: "",
+      drink: state.recordExists ? state.recordDrink : "NOMATTER"
+    };
+  let wasUpdate = state.recordExists;
+  try {
+    button.disabled = true;
+    button.textContent = "제출 중…";
+    status.classList.remove("error");
+    status.textContent = "제출 정보를 확인하고 있습니다.";
+    wasUpdate = await recordAlreadyExists();
+    payload.drink = wasUpdate ? state.recordDrink : "NOMATTER";
+    status.textContent = "서버에 지망을 제출하고 있습니다.";
+    const saved = await sendFinalRecord(payload, wasUpdate);
+    applyRecord(saved);
+    if (!wasUpdate) {
+      state.recordDrink = "NOMATTER";
+      state.recordQuestions = ["", "", ""]
+    }
+    saveRecordDetails();
+    status.textContent = "제출이 완료되었습니다.";
+    $("#finalConfirmModal").classList.remove("open");
+    render();
+    toast(wasUpdate ? "변경한 지망을 최종 제출했습니다." : "지망을 최종 제출했습니다. 이제 음료와 질문을 입력할 수 있어요.")
+  } catch (error) {
+    const message = error.message || "지망을 최종 제출하지 못했습니다.";
+    status.classList.add("error");
+    status.textContent = message;
+    toast(message);
+    if (error.status === 401) {
+      state.loggedIn = false;
+      state.isAdmin = false;
+      state.user = null;
+      storeUser();
+      renderLoginState();
+      $("#finalConfirmModal").classList.remove("open");
+      $("#loginModal").classList.add("open")
+    }
+  } finally {
+    button.disabled = false;
+    button.textContent = "이 순서로 최종 제출"
+  }
+}
+
+function openRecordForm() {
+  if (!requireLogin()) return;
+  if (!state.recordExists || state.recordDirty) {
+    toast("지망을 먼저 최종 제출해 주세요.");
+    return
+  }
+  state.selected.forEach((id, index) => {
+    const selectedMentor = mentor(id);
+    document.getElementById(["firstQuestionLabel", "secondQuestionLabel", "thirdQuestionLabel"][index])
+      .textContent = `${ranks[index]} · ${selectedMentor?.alias || selectedMentor?.name || "멘토"}에게 할 질문`
+  });
+  $("#recordSummary").innerHTML = recordSummaryMarkup();
+  $("#recordForm [name='drink']").value = state.recordDrink;
+  ["firstQuestion", "secondQuestion", "thirdQuestion"].forEach((name, index) => {
+    $(`#recordForm [name='${name}']`).value = state.recordQuestions[index] || ""
+  });
+  $("#recordTitle").textContent = "음료 및 질문 입력";
+  $("#recordSave").textContent = "음료·질문 저장";
+  $("#recordDelete").hidden = false;
+  $("#recordModal").classList.add("open")
+}
+
+async function saveRecord(event) {
+  event.preventDefault();
+  if (state.selected.some(id => !id)) return;
+  const formData = new FormData(event.currentTarget);
+  const questions = ["firstQuestion", "secondQuestion", "thirdQuestion"]
+    .map(name => String(formData.get(name) || "").trim());
+  const payload = {
+    firstMentorId: state.selected[0],
+    firstQuestion: questions[0],
+    secondMentorId: state.selected[1],
+    secondQuestion: questions[1],
+    thirdMentorId: state.selected[2],
+    thirdQuestion: questions[2],
+    drink: formData.get("drink") || "NOMATTER"
+  };
+  const saveButton = $("#recordSave");
+  try {
+    saveButton.disabled = true;
+    saveButton.textContent = "저장 중…";
+    const saved = await api("/record", {
+      method: "PATCH",
+      body: JSON.stringify(payload)
+    });
+    applyRecord(saved);
+    state.recordDrink = payload.drink;
+    state.recordQuestions = questions;
+    saveRecordDetails();
+    $("#recordModal").classList.remove("open");
+    render();
+    toast("음료와 질문을 저장했습니다.")
+  } catch (error) {
+    toast(error.message || "지망을 저장하지 못했습니다.")
+  } finally {
+    saveButton.disabled = false;
+    saveButton.textContent = "음료·질문 저장"
+  }
+}
+
+async function deleteRecord() {
+  try {
+    await api("/record", {method: "DELETE"});
+    state.recordExists = false;
+    state.recordDirty = false;
+    state.recordDrink = "NOMATTER";
+    state.recordQuestions = ["", "", ""];
+    localStorage.removeItem(recordDraftKey());
+    state.selected = [null, null, null];
+    saveOrder();
+    $("#recordModal").classList.remove("open");
+    $("#recordForm").reset();
+    render();
+    toast("제출한 지망을 삭제했습니다.")
+  } catch (error) {
+    toast(error.message || "지망을 삭제하지 못했습니다.")
+  }
+}
+
+function storedUser() {
+  try {
+    return JSON.parse(sessionStorage.getItem(userStorageKey) || "null")
+  } catch (_) {
+    return null
+  }
+}
+
+function storeUser() {
+  if (state.user) sessionStorage.setItem(userStorageKey, JSON.stringify(state.user));
+  else sessionStorage.removeItem(userStorageKey)
+}
+
+function userDisplayName(user) {
+  return user?.name || user?.userName || user?.displayName ||
+    user?.studentName || user?.studentId || "사용자"
+}
+
+async function session() {
+  // 투표 화면과 동일하게 세션 전용 API 한 개로 로그인 여부를 먼저 판정합니다.
+  try {
+    await api("/vote/remain");
+    state.loggedIn = true;
+    state.user = storedUser() || {};
+    try {
+      await api("/admin/check");
+      state.isAdmin = true
+    } catch (_) {
+      state.isAdmin = false
+    }
+
+    // 로그인 UI를 먼저 표시하고 매칭 화면 전용 데이터는 독립적으로 불러옵니다.
+    renderLoginState();
+    const [favoriteResult, recordResult] = await Promise.allSettled([
+      api("/favorite"), api("/record")
+    ]);
+    if (favoriteResult.status === "fulfilled") {
+      state.saved = new Set((favoriteResult.value.votes || [])
+        .map(v => Number(v?.mentorId ?? v?.mentor?.mentorId)).filter(Boolean))
+    }
+    if (recordResult.status === "fulfilled") applyRecord(recordResult.value);
+    else {
+      state.recordExists = false;
+      state.recordDirty = false;
+      state.recordDrink = "NOMATTER";
+      state.recordQuestions = ["", "", ""];
+      state.selected = storedOrder()
+    }
+  } catch (_) {
+    state.loggedIn = false;
+    state.isAdmin = false;
+    state.user = null;
+    storeUser();
+    state.recordDrink = "NOMATTER";
+    state.recordQuestions = ["", "", ""];
+    state.selected = [null, null, null];
+    state.saved.clear()
+  }
+  renderLoginState();
+  render()
+}
+
+function renderLoginState() {
+  const loggedIn = Boolean(state.user),
+    loginButton = $("#loginButton"),
+    displayName = userDisplayName(state.user);
+  state.loggedIn = loggedIn;
+  loginButton.hidden = loggedIn;
+  loginButton.disabled = false;
+  loginButton.classList.remove("logged-in");
+  loginButton.textContent = "로그인";
+  loginButton.title = "로그인";
+  $("#logoutButton").hidden = !loggedIn;
+  $("#adminButton").hidden = !state.isAdmin;
+  $("#userGreeting").hidden = !loggedIn;
+  $("#userGreeting").textContent = loggedIn ?
+    `안녕하세요 ${displayName}님` : ""
+}
+
+async function login(e) {
+  e.preventDefault();
+  const loginForm = e.currentTarget,
+    formData = new FormData(loginForm);
+  try {
+    state.user = await api("/login", {
+      method: "POST",
+      body: JSON.stringify(Object.fromEntries(formData))
+    });
+    storeUser();
+    try {
+      await api("/admin/check");
+      state.isAdmin = true
+    } catch (_) {
+      state.isAdmin = false
+    }
+    renderLoginState();
+    $("#loginModal").classList.remove("open");
+    loginForm.reset();
+
+    const [favoriteResult, recordResult] = await Promise.allSettled([
+      api("/favorite"), api("/record")
+    ]);
+    if (favoriteResult.status === "fulfilled") {
+      state.saved = new Set((favoriteResult.value.votes || [])
+        .map(vote => Number(vote?.mentorId ?? vote?.mentor?.mentorId))
+        .filter(Boolean))
+    }
+    if (recordResult.status === "fulfilled") applyRecord(recordResult.value);
+    else {
+      state.recordExists = false;
+      state.recordDirty = false;
+      state.recordDrink = "NOMATTER";
+      state.recordQuestions = ["", "", ""];
+      state.selected = storedOrder()
+    }
+    render();
+    toast(`${userDisplayName(state.user)} 님, 반갑습니다.`)
+  } catch (error) {
+    if (error.status === 404) toast("등록되지 않은 학번입니다.");
+    else if (error.status === 401) toast("학번 또는 패스코드를 확인해 주세요.");
+    else toast(error.message || "로그인 요청을 처리하지 못했습니다.")
+  }
+}
+async function logout() {
+  try {
+    await api("/logout", {method: "POST"});
+    state.loggedIn = false;
+    state.isAdmin = false;
+    state.user = null;
+    storeUser();
+    state.selected = [null, null, null];
+    state.recordExists = false;
+    state.recordDirty = false;
+    state.recordDrink = "NOMATTER";
+    state.recordQuestions = ["", "", ""];
+    state.saved.clear();
+    state.showSavedOnly = false;
+    renderLoginState();
+    render();
+    toast("로그아웃되었습니다.")
+  } catch (error) {
+    toast(error.message || "로그아웃 요청을 처리하지 못했습니다.")
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 사용자 입력 이벤트 연결
+// -----------------------------------------------------------------------------
+document.addEventListener("click", async e => {
+  const rm = e.target.closest("[data-remove]"),
+    detail = e.target.closest("[data-detail]"),
+    save = e.target.closest("[data-save]"),
+    rank = e.target.closest("[data-rank]"),
+    close = e.target.closest("[data-close]"),
+    explore = e.target.closest("[data-explore]");
+  if (rm) {
+    e.stopPropagation();
+    remove(rm.dataset.remove)
+  } else if (detail) openDetail(detail.dataset.detail);
+  if (save) await toggleFavorite(save.dataset.save);
+  if (rank) choose(rank.dataset.mentor, +rank.dataset.rank);
+  if (explore) $("#mentorList").scrollIntoView({
+    behavior: "smooth"
+  });
+  if (close) document.getElementById(close.dataset.close).classList.remove("open");
+});
+
+$("#structuredFilters").addEventListener("change", e => {
+  const input = e.target.closest("[data-filter-group]");
+  if (input) applyStructuredFilter(input)
+});
+
+$("#structuredFilters").addEventListener("toggle", e => {
+  if (!e.target.matches(".filter-group") || !e.target.open) return;
+  $$("#structuredFilters .filter-group").forEach(group => {
+    if (group !== e.target) group.open = false
+  })
+}, true);
+
+$("#filterReset").addEventListener("click", resetFilters);
+$("#savedFilter").addEventListener("click", () => {
+  if (!requireLogin()) return;
+  state.showSavedOnly = !state.showSavedOnly;
+  renderMentors()
+});
+$("#recordOpen").addEventListener("click", openFinalConfirm);
+$("#finalForm").addEventListener("submit", submitFinalRecord);
+$("#recordDetailsOpen").addEventListener("click", openRecordForm);
+$("#recordForm").addEventListener("submit", saveRecord);
+$("#recordDelete").addEventListener("click", deleteRecord);
+$$(".modal").forEach(m => m.addEventListener("click", e => {
+  if (e.target === m) m.classList.remove("open")
+}));
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") $$('.modal.open').forEach(m => m.classList.remove("open"))
+});
+$("#searchInput").addEventListener("input", e => {
+  state.query = e.target.value.trim();
+  renderMentors()
+});
+$("#searchButton").addEventListener("click", () => {
+  $("#searchInput").focus();
+  state.query = $("#searchInput").value.trim();
+  renderMentors()
+});
+$("#loginButton").onclick = () => $("#loginModal").classList.add("open");
+$("#logoutButton").onclick = logout;
+// 현재 매칭 화면은 유지하고 관리자 화면은 별도의 탭에서 엽니다.
+$("#adminButton").onclick = () => window.open("/?openAdmin=1", "_blank", "noopener");
+$("#loginForm").addEventListener("submit", login);
+(async () => {
+  await load();
+  await session()
+})();
+</script></body></html>
