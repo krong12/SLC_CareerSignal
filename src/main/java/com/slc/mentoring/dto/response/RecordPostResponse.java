@@ -1,6 +1,7 @@
 package com.slc.mentoring.dto.response;
 
 import com.slc.mentoring.entity.Drink;
+import com.slc.mentoring.entity.Mentor;
 import com.slc.mentoring.entity.Record;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,10 +20,14 @@ public class RecordPostResponse {
 
     public RecordPostResponse(Record record) {
         this.recordId = record.getRecordId();
-        this.firstMentorId = record.getFirstMentor().getMentorId();
-        this.secondMentorId = record.getSecondMentor().getMentorId();
-        this.thirdMentorId = record.getThirdMentor().getMentorId();
+        this.firstMentorId = mentorId(record.getFirstMentor());
+        this.secondMentorId = mentorId(record.getSecondMentor());
+        this.thirdMentorId = mentorId(record.getThirdMentor());
         this.drink = record.getDrink();
         this.priorityAt = record.getPriorityAt();
+    }
+
+    private static Long mentorId(Mentor mentor) {
+        return mentor == null ? null : mentor.getMentorId();
     }
 }

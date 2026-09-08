@@ -30,6 +30,10 @@ public class RecordService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
         Record record = recordRepository.findByUser_UserId(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
+
+        if(!isComplete(record))
+            throw new CustomException(ExceptionCode.NOT_FOUND_RECORD);
+
         return new RecordPostResponse(record);
     }
 
@@ -52,14 +56,23 @@ public class RecordService {
                 || thirdMentor.getMentorStatus() != MentorStatus.COMFIRMED)
             throw new CustomException(ExceptionCode.NOT_CONFIRMED_MENTOR);
 
-        Record record = Record.builder()
-                .user(user)
-                .firstMentor(firstMentor)
-                .secondMentor(secondMentor)
-                .thirdMentor(thirdMentor)
-                .drink(request.getDrink())
-                .priorityAt(LocalDateTime.now())
-                .build();
+        Drink drink = request.getDrink() == null ? Drink.NOMATTER : request.getDrink();
+
+        Record record = recordRepository.findByUser_UserId(userId)
+                .map(existingRecord -> {
+                    existingRecord.update(user, firstMentor, secondMentor, thirdMentor,
+                            drink, LocalDateTime.now());
+                    return existingRecord;
+                })
+                .orElseGet(() -> Record.builder()
+                        .user(user)
+                        .firstMentor(firstMentor)
+                        .secondMentor(secondMentor)
+                        .thirdMentor(thirdMentor)
+                        .drink(drink)
+                        .priorityAt(LocalDateTime.now())
+                        .build());
+
         recordRepository.save(record);
 
         if(request.getFirstQuestion() != null && !request.getFirstQuestion().trim().isEmpty()) {
@@ -146,5 +159,11 @@ public class RecordService {
                         .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
         Long recordId = record.getRecordId();
         recordRepository.deleteById(recordId);
+    }
+
+    private boolean isComplete(Record record) {
+        return record.getFirstMentor() != null
+                && record.getSecondMentor() != null
+                && record.getThirdMentor() != null;
     }
 }

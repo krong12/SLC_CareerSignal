@@ -392,8 +392,16 @@ main {
 }
 
 .card-body h2 {
-  font: 25px "DM Serif Display", "Noto Sans KR";
+  font: 700 25px "Noto Sans KR", Manrope, sans-serif;
   margin: 0 0 3px
+}
+
+.mentor-alias {
+  min-height: 18px;
+  margin: 0 0 5px;
+  color: var(--blue-dark);
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .role {
@@ -686,9 +694,9 @@ main {
 :root {
   --page: #ededed;
   --panel: #f3f3f3;
-  --blue: #c0cad6;
-  --blue-dark: #596b7d;
-  --tag: #c3c8ce;
+  --blue: #d0d4da;
+  --blue-dark: #5d738d;
+  --tag: #5d738d;
   --white: #fdfdfd;
   --text: #344252;
 }
@@ -770,8 +778,8 @@ main {
 }
 
 .hero {
-  height: 300px;
-  min-height: 300px;
+  height: 430px;
+  min-height: 430px;
   margin: 0;
   padding: 58px 20px 22px;
   align-items: stretch;
@@ -787,49 +795,53 @@ main {
 
 .hero h1 {
   position: absolute;
-  top: 92px;
-  left: 5vw;
-  width: min(390px, 40vw);
+  top: 64px;
+  left: 50%;
+  width: min(650px, 58vw);
   margin: 0;
   font-size: 0;
   text-shadow: none;
+  transform: translateX(-50%);
 }
 
 .hero-logo {
   display: block;
   width: 100%;
-}
-
-.matching-label {
-  display: block;
-  margin-top: 7px;
-  color: var(--white);
-  font: 500 clamp(12px, 1.1vw, 15px)/1.2 Manrope, "Noto Sans KR", sans-serif;
-  letter-spacing: .32em;
-  text-align: center;
-  text-transform: uppercase;
+  max-width: 100%;
+  height: auto;
 }
 
 .choices {
-  position: absolute;
-  top: 88px;
-  right: 5vw;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.4vw, 20px);
 }
 
 .choice {
-  width: 125px;
-  height: 125px;
+  width: clamp(185px, 21vw, 305px);
+  height: auto;
+  aspect-ratio: 1516/488;
   margin-left: 0;
-  border: 2px solid rgba(255, 255, 255, .82);
-  border-radius: 22px;
+  border: 0;
+  border-radius: 999px;
   color: var(--white);
-  background-color: rgba(89, 107, 125, .42);
+  background-color: transparent;
   background-image: none;
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
   box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.choice-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
 }
 
 .choice:first-child {
@@ -838,25 +850,30 @@ main {
 
 .choice.filled {
   border: 2px solid var(--white);
-  border-radius: 22px;
-  background-color: #71849a;
+  border-radius: 999px;
+  background-color: transparent;
+  background-image: none;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .choice.filled:before {
-  border-radius: 20px;
+  border-radius: 999px;
   z-index: 1;
+}
+
+.choice.filled:after {
+  content: none;
 }
 
 .choice-photo {
   position: absolute;
-  inset: 7px;
+  inset: 0;
   z-index: 0;
-  width: calc(100% - 14px);
-  height: calc(100% - 14px);
-  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
   object-fit: cover;
   object-position: center;
 }
@@ -865,7 +882,7 @@ main {
 .choice.filled>strong,
 .choice.filled>small,
 .choice.filled>.choice-remove {
-  z-index: 2;
+  z-index: 3;
 }
 
 .choice-number {
@@ -874,8 +891,9 @@ main {
 }
 
 .choice-remove {
-  right: 3px;
-  top: 3px;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--blue-dark);
   background: var(--white);
 }
@@ -893,12 +911,15 @@ main {
 
 .preference-controls {
   position: absolute;
-  top: 88px;
-  right: 5vw;
+  top: 245px;
+  left: 50%;
+  right: auto;
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 16px;
+  width: min(1180px, 94vw);
+  gap: clamp(10px, 1.5vw, 22px);
+  transform: translateX(-50%);
 }
 
 .preference-controls .choices {
@@ -1035,6 +1056,36 @@ main {
   font-size: 12px;
   font-weight: 700;
   text-align: center;
+}
+
+.event-notice {
+  margin: 14px 0 0;
+  border-left: 4px solid var(--blue-dark);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  background: #e7ebef;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.final-drink-field {
+  display: grid;
+  gap: 7px;
+  margin-top: 16px;
+  color: var(--blue-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.final-drink-field select {
+  width: 100%;
+  border: 1px solid #cbd2d9;
+  border-radius: 13px;
+  padding: 13px 15px;
+  color: var(--text);
+  background: var(--white);
+  font: inherit;
 }
 
 .form-status {
@@ -1480,6 +1531,7 @@ main {
 
 .card-foot {
   border-color: #d7dce1;
+  justify-content: flex-end;
 }
 
 .card-rank-actions {
@@ -1515,10 +1567,6 @@ main {
 .card-rank-button.selected:disabled,
 .rank-action.selected:disabled {
   opacity: 1;
-}
-
-.status {
-  color: var(--blue-dark);
 }
 
 .primary,
@@ -1559,12 +1607,11 @@ main {
   }
 
   .hero h1 {
-    width: min(330px, 38vw);
+    width: min(570px, 68vw);
   }
 
   .preference-controls {
-    top: 100px;
-    right: 4vw;
+    width: min(940px, 96vw);
   }
 }
 
@@ -1620,23 +1667,24 @@ main {
 @media(max-width:760px) {
   .hero {
     height: auto;
-    min-height: 285px;
+    min-height: 380px;
     display: grid;
     grid-template-columns: 1fr;
     place-items: center;
-    padding: 72px 14px 24px;
+    padding: 92px 12px 24px;
   }
 
   .choice {
-    width: min(105px, calc((100vw - 52px) / 3));
-    height: min(105px, calc((100vw - 52px) / 3));
+    width: 100%;
+    height: auto;
     margin-left: 0;
   }
 
   .hero h1 {
     position: static;
-    width: min(330px, calc(100vw - 40px));
-    margin: 0 auto 16px;
+    width: calc(100% - 16px);
+    max-width: 430px;
+    margin: 0 auto 22px;
     transform: none;
   }
 
@@ -1648,17 +1696,20 @@ main {
     gap: 12px;
     justify-content: center;
     transform: none;
+    min-width: 0;
   }
 
   .preference-controls .choices {
     width: 100%;
-    gap: 6px;
+    min-width: 0;
+    gap: 5px;
   }
 
   .hero-note {
-    right: 14px;
-    bottom: 10px;
-    max-width: calc(100vw - 28px);
+    position: static;
+    max-width: calc(100vw - 24px);
+    margin: 12px auto 0;
+    text-align: center;
     line-height: 1.45;
   }
 
@@ -1679,11 +1730,18 @@ main {
 
   .topbar {
     right: 8px;
+    left: 8px;
+    width: auto;
+    height: auto;
+    min-height: 54px;
     max-width: calc(100vw - 16px);
     padding: 5px 7px;
   }
 
   .top-actions {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     gap: 5px;
   }
 
@@ -1692,11 +1750,75 @@ main {
   }
 
   .user-greeting {
-    max-width: 52vw;
+    max-width: min(60vw, 260px);
     padding-inline: 12px;
   }
 
   .record-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    padding: 10px;
+  }
+
+  .dialog {
+    width: 100%;
+    max-height: calc(100dvh - 20px);
+    border-radius: 22px;
+    padding: 28px 18px 20px;
+  }
+
+  .dialog h2 {
+    padding-right: 28px;
+    font-size: clamp(28px, 9vw, 38px);
+    line-height: 1.2;
+  }
+
+  .record-actions {
+    flex-direction: column;
+  }
+}
+
+@media(max-width:600px) {
+  main {
+    padding: 28px 12px 64px;
+  }
+
+  .toolbar {
+    gap: 8px;
+  }
+
+  .structured-filters {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .filter-reset,
+  .saved-filter {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .mentor-grid {
+    gap: 18px;
+  }
+
+  .detail-dialog .business-card {
+    min-height: 0;
+    display: block;
+  }
+
+  .detail-dialog .profile-photo {
+    height: 210px;
+  }
+
+  .detail-dialog .profile-info {
+    padding: 24px 16px 18px;
+    overflow: visible;
+  }
+
+  .detail-dialog .rank-actions {
     grid-template-columns: 1fr;
   }
 }
@@ -1718,8 +1840,7 @@ main {
   <section class="hero">
     <span class="eyebrow">Mentor matching · 2026</span>
     <h1>
-      <img class="hero-logo" src="/assets/career-signal-logo.png" alt="Career Signal">
-      <span class="matching-label">Matching</span>
+      <img class="hero-logo" src="/assets/matching-logo.png" alt="Career Signal mentor matching">
     </h1>
     <p class="hero-copy">
       함께하고 싶은 멘토를 우선순위에 따라 선택해 주세요.<br>
@@ -1728,7 +1849,7 @@ main {
     <div class="preference-controls">
       <div class="matching-actions">
         <button class="record-submit" id="recordOpen" type="button" disabled>최종 제출</button>
-        <button class="record-detail-button" id="recordDetailsOpen" type="button" hidden>음료·질문 입력</button>
+        <button class="record-detail-button" id="recordDetailsOpen" type="button" hidden>질문 입력</button>
       </div>
       <div class="choices" id="choices"></div>
     </div>
@@ -1790,9 +1911,19 @@ main {
       <button class="close" data-close="finalConfirmModal" aria-label="최종 제출 확인 창 닫기">×</button>
       <div class="eyebrow">Final preferences</div>
       <h2>지망 최종 제출</h2>
-      <p class="intro">아래 순서로 지망을 제출합니다. 제출 후 음료와 질문을 별도로 입력할 수 있습니다.</p>
+      <p class="intro">아래 순서와 희망 음료를 확인한 뒤 최종 제출해 주세요. 질문은 제출 후 별도로 입력할 수 있습니다.</p>
       <div class="record-summary" id="finalSummary" aria-label="최종 제출할 멘토 순서"></div>
       <form id="finalForm">
+        <p class="event-notice"><strong>참여 안내</strong><br>지망을 최종 제출하면 9월 19일 멘토 매칭 행사에 참여하는 것으로 등록됩니다.</p>
+        <label class="final-drink-field">행사에서 받을 음료
+          <select name="drink" required>
+            <option value="NOMATTER">상관없음</option>
+            <option value="WATER">물</option>
+            <option value="AMERICANO">아메리카노</option>
+            <option value="ICETEA">아이스티</option>
+            <option value="TEA">차</option>
+          </select>
+        </label>
         <p class="submission-warning" role="alert">최종 제출 후에는 지망을 수정할 수 없습니다.</p>
         <div class="record-actions">
           <button class="primary" type="submit" id="finalSave">이 순서로 최종 제출</button>
@@ -1804,21 +1935,12 @@ main {
 
   <div class="modal" id="recordModal" role="dialog" aria-modal="true">
     <article class="dialog">
-      <button class="close" data-close="recordModal" aria-label="음료 및 질문 입력 창 닫기">×</button>
+      <button class="close" data-close="recordModal" aria-label="질문 입력 창 닫기">×</button>
       <div class="eyebrow">Additional information</div>
-      <h2 id="recordTitle">음료 및 질문 입력</h2>
-      <p class="intro">최종 제출한 지망별 질문과 희망 음료를 입력해 주세요.</p>
+      <h2 id="recordTitle">질문 입력</h2>
+      <p class="intro">최종 제출한 멘토에게 궁금한 내용을 지망별로 입력해 주세요.</p>
       <div class="record-summary" id="recordSummary" aria-label="선택한 멘토 순서"></div>
       <form class="record-form" id="recordForm">
-        <label>희망 음료
-          <select name="drink" required>
-            <option value="NOMATTER">상관없음</option>
-            <option value="WATER">물</option>
-            <option value="AMERICANO">아메리카노</option>
-            <option value="ICETEA">아이스티</option>
-            <option value="TEA">차</option>
-          </select>
-        </label>
         <label><span id="firstQuestionLabel">1지망 질문</span>
           <textarea name="firstQuestion" placeholder="선택 사항입니다."></textarea>
         </label>
@@ -1829,7 +1951,7 @@ main {
           <textarea name="thirdQuestion" placeholder="선택 사항입니다."></textarea>
         </label>
         <div class="record-actions">
-          <button class="primary" type="submit" id="recordSave">음료·질문 저장</button>
+          <button class="primary" type="submit" id="recordSave">질문 저장</button>
           <button class="record-delete" type="button" id="recordDelete" hidden>제출 삭제</button>
         </div>
       </form>
@@ -1946,11 +2068,12 @@ function renderChoices() {
   const selectionLocked = state.recordExists && !state.recordDirty;
   $("#choices").innerHTML = [0, 1, 2].map(i => {
     const m = mentor(state.selected[i]);
-    if (!m) return `<button class="choice" data-explore aria-label="${ranks[i]} 멘토 선택"><span class="choice-number">${i+1}</span></button>`;
+    if (!m) return `<button class="choice" data-explore aria-label="${ranks[i]} 멘토 선택"><img class="choice-frame" src="/assets/matching-rank-${i+1}.png" alt=""></button>`;
     const img = photo(m) || "/assets/profile-placeholder.png";
     const removeButton = selectionLocked ? "" :
       `<button class="choice-remove" data-remove="${m.mentorId}" aria-label="선택 취소">×</button>`;
-    return `<div class="choice filled" data-detail="${m.mentorId}"><img class="choice-photo" src="${img}" alt="${esc(m.alias||m.name)} 프로필">${removeButton}<b>${ranks[i]}</b><strong>${esc(m.alias||m.name)}</strong><small>${esc(m.companyName||m.job||"")}</small></div>`
+    const alias = m.alias && m.alias !== m.name ? m.alias : "";
+    return `<div class="choice filled" data-detail="${m.mentorId}"><img class="choice-photo" src="${img}" alt="${esc(m.name||m.alias)} 프로필">${removeButton}<b>${ranks[i]}</b><strong>${esc(m.name||m.alias)}</strong><small>${esc(alias||m.companyName||m.job||"")}</small></div>`
   }).join("");
   const selectedCount = state.selected.filter(Boolean).length;
   $("#selectedCount").textContent = selectedCount;
@@ -1983,9 +2106,13 @@ function renderMentors() {
       `<button class="card-rank-button ${rank===rankIndex?"selected":""}" data-rank="${rankIndex}" data-mentor="${m.mentorId}" ${selectionLocked?"disabled":""}>${label}</button>`
     ).join("");
     const isSaved = state.saved.has(Number(m.mentorId));
+    const alias = m.alias && m.alias !== m.name ? m.alias : "";
+    const graduation = m.graduatedYear ? `${m.graduatedYear}년 졸업` : "";
+    const role = [m.companyName || "Independent", m.job || "Mentor", graduation]
+      .filter(Boolean).join(" · ");
     const avatar = wideImage ? "" :
-      `<div class="avatar" style="${img?`background-image:url('${img}')`:""}">${img?"":esc((m.alias||m.name||"M")[0])}</div>`;
-    return `<article class="mentor-card" style="animation-delay:${Math.min(i*.04,.3)}s"><div class="card-visual" style="${wideImage?`background-image:url('${wideImage}')`:""}">${rank>=0?`<span class="rank-badge">${ranks[rank]} 선택</span>`:""}<button class="save-button ${isSaved?"active":""}" data-save="${m.mentorId}" aria-label="${isSaved?"관심 멘토에서 삭제":"관심 멘토로 저장"}" aria-pressed="${isSaved}">${isSaved?"♥":"♡"}</button>${avatar}</div><div class="card-body"><h2>${esc(m.alias||m.name)}</h2><p class="role">${esc(m.companyName||"Independent")} · ${esc(m.job||"Mentor")}</p><div class="tags">${[...names(m.major),...names(m.field).map(value=>fieldLabels[value]||value),careerLabels[name(m.careerPath)]||name(m.careerPath)].filter(Boolean).slice(0,4).map(v=>`<span class="tag"># ${esc(v)}</span>`).join("")}</div><div class="card-foot"><span class="status">● 매칭 가능</span><button class="detail" data-detail="${m.mentorId}">프로필 보기 →</button></div><div class="card-rank-actions" aria-label="${esc(m.alias||m.name)} 지망 선택">${rankButtons}</div></div></article>`
+      `<div class="avatar" style="${img?`background-image:url('${img}')`:""}">${img?"":esc((m.name||m.alias||"M")[0])}</div>`;
+    return `<article class="mentor-card" style="animation-delay:${Math.min(i*.04,.3)}s"><div class="card-visual" style="${wideImage?`background-image:url('${wideImage}')`:""}">${rank>=0?`<span class="rank-badge">${ranks[rank]} 선택</span>`:""}<button class="save-button ${isSaved?"active":""}" data-save="${m.mentorId}" aria-label="${isSaved?"관심 멘토에서 삭제":"관심 멘토로 저장"}" aria-pressed="${isSaved}">${isSaved?"♥":"♡"}</button>${avatar}</div><div class="card-body"><h2>${esc(m.name||m.alias)}</h2><p class="mentor-alias">${alias?`활동명 · ${esc(alias)}`:"&nbsp;"}</p><p class="role">${esc(role)}</p><div class="tags">${[...names(m.major),...names(m.field).map(value=>fieldLabels[value]||value),careerLabels[name(m.careerPath)]||name(m.careerPath)].filter(Boolean).slice(0,4).map(v=>`<span class="tag"># ${esc(v)}</span>`).join("")}</div><div class="card-foot"><button class="detail" data-detail="${m.mentorId}">프로필 보기 →</button></div><div class="card-rank-actions" aria-label="${esc(m.name||m.alias)} 지망 선택">${rankButtons}</div></div></article>`
   }).join("") : `<div class="empty">조건에 맞는 멘토를 찾지 못했어요.<br>다른 검색어나 필터를 사용해 보세요.</div>`
   $("#savedCount").textContent = state.saved.size;
   $("#savedFilter").classList.toggle("active", state.showSavedOnly);
@@ -2025,12 +2152,9 @@ async function openDetail(id) {
   if (!m) return;
   const current = state.selected.indexOf(Number(id)),
     img = photo(m);
-  let voteCount = null;
-  try {
-    voteCount = await api(`/vote/mentor/${m.mentorId}`)
-  } catch (_) {}
   const tags = [
     ["전공", names(m.major).join(" · ")],
+    ["졸업년도", m.graduatedYear ? `${m.graduatedYear}년` : ""],
     ["직장명", m.companyName],
     ["직무", m.job],
     ["전문 분야", names(m.field).map(value => fieldLabels[value] || value).join(" · ")],
@@ -2039,8 +2163,9 @@ async function openDetail(id) {
   ];
   const profileImage = img || "/assets/profile-placeholder.png";
   const selectionLocked = state.recordExists && !state.recordDirty;
+  const alias = m.alias && m.alias !== m.name ? m.alias : "";
   $("#detailContent").innerHTML =
-    `<div class="business-card"><div class="profile-photo" style="background-image:url('${profileImage}')" role="img" aria-label="${esc(m.alias||m.name)} 프로필 이미지"></div><div class="profile-info"><div class="eyebrow">Mentor profile</div><h2>${esc(m.alias||m.name)}</h2><div class="labeled-tags">${tags.filter(([,value])=>value).map(([label,value])=>`<span class="labeled-tag"><b>${label}</b># ${esc(value)}</span>`).join("")}</div><div class="profile-sections"><section class="profile-section bio"><h3>약력</h3><p>${esc(m.introduce||"등록된 약력이 없습니다.")}</p></section><section class="profile-section quote"><h3>멘토의 한 마디</h3><p>${esc(m.oneLine||"등록된 한 마디가 없습니다.")}</p></section></div>${voteCount!==null?`<p class="detail-vote-count">현재 받은 시그널 <b>${voteCount}</b>개</p>`:""}<p class="select-title">${selectionLocked?"최종 제출된 지망은 변경할 수 없습니다.":"희망 순위를 선택해 주세요"}</p><div class="rank-actions">${[0,1,2].map(i=>`<button class="rank-action ${current===i?"selected":""}" data-rank="${i}" data-mentor="${m.mentorId}" ${selectionLocked?"disabled":""}>${current===i?`${ranks[i]} 선택됨`:`${ranks[i]}으로 선택`}</button>`).join("")}</div></div></div>`;
+    `<div class="business-card"><div class="profile-photo" style="background-image:url('${profileImage}')" role="img" aria-label="${esc(m.name||m.alias)} 프로필 이미지"></div><div class="profile-info"><div class="eyebrow">Mentor profile</div><h2>${esc(m.name||m.alias)}</h2>${alias?`<p class="mentor-alias">활동명 · ${esc(alias)}</p>`:""}<div class="labeled-tags">${tags.filter(([,value])=>value).map(([label,value])=>`<span class="labeled-tag"><b>${label}</b># ${esc(value)}</span>`).join("")}</div><div class="profile-sections"><section class="profile-section bio"><h3>약력</h3><p>${esc(m.introduce||"등록된 약력이 없습니다.")}</p></section><section class="profile-section quote"><h3>멘토의 한 마디</h3><p>${esc(m.oneLine||"등록된 한 마디가 없습니다.")}</p></section></div><p class="select-title">${selectionLocked?"최종 제출된 지망은 변경할 수 없습니다.":"희망 순위를 선택해 주세요"}</p><div class="rank-actions">${[0,1,2].map(i=>`<button class="rank-action ${current===i?"selected":""}" data-rank="${i}" data-mentor="${m.mentorId}" ${selectionLocked?"disabled":""}>${current===i?`${ranks[i]} 선택됨`:`${ranks[i]}으로 선택`}</button>`).join("")}</div></div></div>`;
   $("#detailModal").classList.add("open")
 }
 
@@ -2240,7 +2365,9 @@ async function loadRecord() {
 function recordSummaryMarkup() {
   return state.selected.map((id, index) => {
     const selectedMentor = mentor(id);
-    return `<div class="record-summary-card"><b>${ranks[index]}</b><strong>${esc(selectedMentor?.alias || selectedMentor?.name || "멘토")}</strong><small>${esc(selectedMentor?.companyName || selectedMentor?.job || "")}</small></div>`
+    const alias = selectedMentor?.alias && selectedMentor.alias !== selectedMentor.name ?
+      `활동명 · ${selectedMentor.alias}` : (selectedMentor?.companyName || selectedMentor?.job || "");
+    return `<div class="record-summary-card"><b>${ranks[index]}</b><strong>${esc(selectedMentor?.name || selectedMentor?.alias || "멘토")}</strong><small>${esc(alias)}</small></div>`
   }).join("")
 }
 
@@ -2251,6 +2378,7 @@ function openFinalConfirm() {
     return
   }
   $("#finalSummary").innerHTML = recordSummaryMarkup();
+  $("#finalForm [name='drink']").value = state.recordDrink || "NOMATTER";
   $("#finalStatus").textContent = "";
   $("#finalStatus").classList.remove("error");
   $("#finalConfirmModal").classList.add("open")
@@ -2278,6 +2406,7 @@ async function recordAlreadyExists() {
 async function submitFinalRecord(event) {
   event?.preventDefault();
   if (state.selected.some(id => !id)) return;
+  const selectedDrink = new FormData(event.currentTarget).get("drink") || "NOMATTER";
   const button = $("#finalSave"),
     status = $("#finalStatus"),
     payload = {
@@ -2287,7 +2416,7 @@ async function submitFinalRecord(event) {
       secondQuestion: "",
       thirdMentorId: state.selected[2],
       thirdQuestion: "",
-      drink: state.recordExists ? state.recordDrink : "NOMATTER"
+      drink: selectedDrink
     };
   let wasUpdate = state.recordExists;
   try {
@@ -2296,14 +2425,11 @@ async function submitFinalRecord(event) {
     status.classList.remove("error");
     status.textContent = "제출 정보를 확인하고 있습니다.";
     wasUpdate = await recordAlreadyExists();
-    payload.drink = wasUpdate ? state.recordDrink : "NOMATTER";
     status.textContent = "서버에 지망을 제출하고 있습니다.";
     const saved = await sendFinalRecord(payload, wasUpdate);
     applyRecord(saved);
-    if (!wasUpdate) {
-      state.recordDrink = "NOMATTER";
-      state.recordQuestions = ["", "", ""]
-    }
+    state.recordDrink = payload.drink;
+    if (!wasUpdate) state.recordQuestions = ["", "", ""];
     saveRecordDetails();
     status.textContent = "제출이 완료되었습니다.";
     $("#finalConfirmModal").classList.remove("open");
@@ -2338,15 +2464,14 @@ function openRecordForm() {
   state.selected.forEach((id, index) => {
     const selectedMentor = mentor(id);
     document.getElementById(["firstQuestionLabel", "secondQuestionLabel", "thirdQuestionLabel"][index])
-      .textContent = `${ranks[index]} · ${selectedMentor?.alias || selectedMentor?.name || "멘토"}에게 할 질문`
+      .textContent = `${ranks[index]} · ${selectedMentor?.name || selectedMentor?.alias || "멘토"}에게 할 질문`
   });
   $("#recordSummary").innerHTML = recordSummaryMarkup();
-  $("#recordForm [name='drink']").value = state.recordDrink;
   ["firstQuestion", "secondQuestion", "thirdQuestion"].forEach((name, index) => {
     $(`#recordForm [name='${name}']`).value = state.recordQuestions[index] || ""
   });
-  $("#recordTitle").textContent = "음료 및 질문 입력";
-  $("#recordSave").textContent = "음료·질문 저장";
+  $("#recordTitle").textContent = "질문 입력";
+  $("#recordSave").textContent = "질문 저장";
   $("#recordDelete").hidden = false;
   $("#recordModal").classList.add("open")
 }
@@ -2364,7 +2489,7 @@ async function saveRecord(event) {
     secondQuestion: questions[1],
     thirdMentorId: state.selected[2],
     thirdQuestion: questions[2],
-    drink: formData.get("drink") || "NOMATTER"
+    drink: state.recordDrink || "NOMATTER"
   };
   const saveButton = $("#recordSave");
   try {
@@ -2380,12 +2505,12 @@ async function saveRecord(event) {
     saveRecordDetails();
     $("#recordModal").classList.remove("open");
     render();
-    toast("음료와 질문을 저장했습니다.")
+    toast("질문을 저장했습니다.")
   } catch (error) {
     toast(error.message || "지망을 저장하지 못했습니다.")
   } finally {
     saveButton.disabled = false;
-    saveButton.textContent = "음료·질문 저장"
+    saveButton.textContent = "질문 저장"
   }
 }
 
