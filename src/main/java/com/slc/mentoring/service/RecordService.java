@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class RecordService {
         if(!isComplete(record))
             throw new CustomException(ExceptionCode.NOT_FOUND_RECORD);
 
-        return new RecordPostResponse(record);
+        return responseWithQuestions(record);
     }
 
     public RecordPostResponse CreateRecord(Long userId, RecordPostRequest request) {
@@ -72,35 +74,13 @@ public class RecordService {
                         .drink(drink)
                         .priorityAt(LocalDateTime.now())
                         .build());
-
         recordRepository.save(record);
+        clearQuestions(userId);
+        saveQuestion(user, firstMentor, request.getFirstQuestion());
+        saveQuestion(user, secondMentor, request.getSecondQuestion());
+        saveQuestion(user, thirdMentor, request.getThirdQuestion());
 
-        if(request.getFirstQuestion() != null && !request.getFirstQuestion().trim().isEmpty()) {
-            MentorQuestion firstQuestion = MentorQuestion.builder()
-                    .user(user)
-                    .mentor(firstMentor)
-                    .content(request.getFirstQuestion())
-                    .build();
-            questionRepository.save(firstQuestion);
-        }
-        if(request.getSecondQuestion() != null && !request.getSecondQuestion().trim().isEmpty()) {
-            MentorQuestion secondQuestion = MentorQuestion.builder()
-                    .user(user)
-                    .mentor(secondMentor)
-                    .content(request.getSecondQuestion())
-                    .build();
-            questionRepository.save(secondQuestion);
-        }
-        if(request.getThirdQuestion() != null && !request.getThirdQuestion().trim().isEmpty()) {
-            MentorQuestion thirdQuestion = MentorQuestion.builder()
-                    .user(user)
-                    .mentor(thirdMentor)
-                    .content(request.getThirdQuestion())
-                    .build();
-            questionRepository.save(thirdQuestion);
-        }
-
-        return new RecordPostResponse(record);
+        return responseWithQuestions(record);
     }
 
     public RecordPostResponse updateRecord(Long userId, RecordPostRequest request) {
@@ -126,32 +106,49 @@ public class RecordService {
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
         record.update(user, firstMentor, secondMentor, thirdMentor, request.getDrink(), LocalDateTime.now());
 
-        if(request.getFirstQuestion() != null && !request.getFirstQuestion().trim().isEmpty()) {
-            MentorQuestion firstQuestion = MentorQuestion.builder()
-                    .user(user)
-                    .mentor(firstMentor)
-                    .content(request.getFirstQuestion())
-                    .build();
-            questionRepository.save(firstQuestion);
-        }
-        if(request.getSecondQuestion() != null && !request.getSecondQuestion().trim().isEmpty()) {
-            MentorQuestion secondQuestion = MentorQuestion.builder()
-                    .user(user)
-                    .mentor(secondMentor)
-                    .content(request.getSecondQuestion())
-                    .build();
-            questionRepository.save(secondQuestion);
-        }
-        if(request.getThirdQuestion() != null && !request.getThirdQuestion().trim().isEmpty()) {
-            MentorQuestion thirdQuestion = MentorQuestion.builder()
-                    .user(user)
-                    .mentor(thirdMentor)
-                    .content(request.getThirdQuestion())
-                    .build();
-            questionRepository.save(thirdQuestion);
-        }
+        clearQuestions(userId);
+        saveQuestion(user, firstMentor, request.getFirstQuestion());
+        saveQuestion(user, secondMentor, request.getSecondQuestion());
+        saveQuestion(user, thirdMentor, request.getThirdQuestion());
 
-        return new RecordPostResponse(record);
+        return responseWithQuestions(record);
+    }
+
+    private void saveQuestion(User user, Mentor mentor, String content) {
+        if(content == null || content.trim().isEmpty()) return;
+        MentorQuestion question = MentorQuestion.builder()
+                .user(user)
+                .mentor(mentor)
+                .content(content.trim())
+                .build();
+        questionRepository.save(question);
+    }
+
+    private void clearQuestions(Long userId) {
+        questionRepository.deleteAllByUser_UserId(userId);
+        questionRepository.flush();
+    }
+
+    private RecordPostResponse responseWithQuestions(Record record) {
+        Map<Long, String> questionsByMentor = new HashMap<>();
+        questionRepository.findAllByUser_UserIdOrderByQuestionIdAsc(record.getUser().getUserId())
+                .forEach(question -> questionsByMentor.put(
+                        question.getMentor().getMentorId(), question.getContent()));
+
+        return new RecordPostResponse(
+                record,
+                questionsByMentor.get(record.getFirstMentor().getMentorId()),
+                questionsByMentor.get(record.getSecondMentor().getMentorId()),
+                questionsByMentor.get(record.getThirdMentor().getMentorId())
+        );
+    }
+
+    public void deleteQuestions(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_USER_ID));
+        recordRepository.findByUser_UserId(userId)
+                .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
+        clearQuestions(userId);
     }
 
     public void deleteRecord(Long userId) {

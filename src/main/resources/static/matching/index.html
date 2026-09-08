@@ -478,7 +478,17 @@ main {
   background: var(--panel);
   box-shadow: 0 30px 80px rgba(0, 0, 0, .25);
   position: relative;
-  padding: 35px
+  padding: 35px;
+  font-size: 15px
+}
+
+.dialog .eyebrow {
+  font-size: 12px;
+  font-weight: 600
+}
+
+.dialog .mentor-alias {
+  font-size: 12px
 }
 
 .close {
@@ -505,13 +515,14 @@ main {
 }
 
 .dialog h2 {
-  font: 400 42px "DM Serif Display", "Noto Sans KR";
+  font: 400 44px "DM Serif Display", "Noto Sans KR";
   margin: 8px 0
 }
 
 .intro {
   white-space: pre-line;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1.85;
   color: #57534a;
   border-top: 1px solid var(--line);
@@ -519,7 +530,7 @@ main {
 }
 
 .select-title {
-  font-size: 12px;
+  font-size: 13px;
   margin: 24px 0 9px
 }
 
@@ -534,7 +545,7 @@ main {
   background: transparent;
   padding: 12px 7px;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700
 }
 
@@ -556,7 +567,8 @@ main {
   border-radius: 14px;
   background: var(--white);
   padding: 15px;
-  outline: none
+  outline: none;
+  font-size: 14px
 }
 
 .primary {
@@ -565,6 +577,7 @@ main {
   background: var(--black);
   color: var(--yellow);
   padding: 14px 20px;
+  font-size: 14px;
   font-weight: 700
 }
 
@@ -572,7 +585,7 @@ main {
   margin: 18px 0 0;
   text-align: center;
   color: var(--muted);
-  font-size: 13px
+  font-size: 14px
 }
 
 .login-support a {
@@ -783,7 +796,7 @@ main {
   margin: 0;
   padding: 58px 20px 22px;
   align-items: stretch;
-  background: #071c38 url("/assets/curtain.png") center/cover no-repeat;
+  background: #071c38 url("/assets/open-curtain.png") center/cover no-repeat;
   box-shadow: none;
 }
 
@@ -993,12 +1006,12 @@ main {
 
 .record-summary-card b {
   margin-bottom: 3px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .record-summary-card strong {
   overflow: hidden;
-  font-size: 14px;
+  font-size: 15px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1007,7 +1020,7 @@ main {
   margin-top: 2px;
   overflow: hidden;
   color: #68727e;
-  font-size: 10px;
+  font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -1016,7 +1029,7 @@ main {
   display: grid;
   gap: 6px;
   color: var(--blue-dark);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -1029,6 +1042,7 @@ main {
   color: var(--text);
   background: var(--white);
   font: inherit;
+  font-size: 14px;
 }
 
 .record-form textarea {
@@ -1053,20 +1067,27 @@ main {
   padding: 11px 14px;
   color: #7f4e3e;
   background: #f7eee4;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   text-align: center;
 }
 
 .event-notice {
   margin: 14px 0 0;
-  border-left: 4px solid var(--blue-dark);
+  border: 1px solid #bd8795;
+  border-left: 5px solid #74263b;
   border-radius: 10px;
   padding: 12px 14px;
-  color: var(--text);
-  background: #e7ebef;
-  font-size: 13px;
+  color: #70283b;
+  background: #f2e3e8;
+  font-size: 14px;
+  font-weight: 600;
   line-height: 1.55;
+}
+
+.event-notice strong {
+  color: #591729;
+  font-weight: 800;
 }
 
 .final-drink-field {
@@ -1074,7 +1095,7 @@ main {
   gap: 7px;
   margin-top: 16px;
   color: var(--blue-dark);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -1092,7 +1113,7 @@ main {
   min-height: 20px;
   margin: 10px 0 0;
   color: var(--blue-dark);
-  font-size: 12px;
+  font-size: 13px;
   text-align: center;
 }
 
@@ -1106,6 +1127,7 @@ main {
   padding: 13px 19px;
   color: #9a4444;
   background: var(--white);
+  font-size: 14px;
 }
 
 main {
@@ -1462,13 +1484,13 @@ main {
   border-radius: 10px;
   color: var(--text);
   background: var(--white);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .labeled-tag b {
   margin-right: 6px;
   color: var(--blue-dark);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .profile-sections {
@@ -1485,11 +1507,12 @@ main {
 .profile-section h3 {
   margin: 0 0 5px;
   color: var(--blue-dark);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .profile-section p {
   margin: 0;
+  font-size: 14px;
   line-height: 1.55;
   white-space: pre-wrap;
 }
@@ -1503,13 +1526,13 @@ main {
   border-top: 1px solid #d5dce2;
   color: #65717e;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .detail-vote-count {
   margin: 4px 0 10px;
   color: var(--text);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .detail-dialog .select-title {
@@ -1771,7 +1794,7 @@ main {
 
   .dialog h2 {
     padding-right: 28px;
-    font-size: clamp(28px, 9vw, 38px);
+    font-size: clamp(29px, 9vw, 39px);
     line-height: 1.2;
   }
 
@@ -1807,6 +1830,21 @@ main {
   .detail-dialog .business-card {
     min-height: 0;
     display: block;
+    height: auto;
+  }
+
+  .detail-dialog,
+  .detail-dialog #detailContent {
+    height: auto;
+  }
+
+  .detail-dialog {
+    max-height: calc(100dvh - 20px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
   }
 
   .detail-dialog .profile-photo {
@@ -1924,7 +1962,7 @@ main {
             <option value="TEA">차</option>
           </select>
         </label>
-        <p class="submission-warning" role="alert">최종 제출 후에는 지망을 수정할 수 없습니다.</p>
+        <p class="submission-warning" role="alert">최종 제출 후에는 지망과 음료를 수정할 수 없습니다.</p>
         <div class="record-actions">
           <button class="primary" type="submit" id="finalSave">이 순서로 최종 제출</button>
         </div>
@@ -1938,7 +1976,7 @@ main {
       <button class="close" data-close="recordModal" aria-label="질문 입력 창 닫기">×</button>
       <div class="eyebrow">Additional information</div>
       <h2 id="recordTitle">질문 입력</h2>
-      <p class="intro">최종 제출한 멘토에게 궁금한 내용을 지망별로 입력해 주세요.</p>
+      <p class="intro">선택한 멘토분들에 대해 궁금한 내용을 멘토별로 입력해 주세요. 질문 입력 시 멘토매칭에 가산점이 부여됩니다.</p>
       <div class="record-summary" id="recordSummary" aria-label="선택한 멘토 순서"></div>
       <form class="record-form" id="recordForm">
         <label><span id="firstQuestionLabel">1지망 질문</span>
@@ -1952,8 +1990,9 @@ main {
         </label>
         <div class="record-actions">
           <button class="primary" type="submit" id="recordSave">질문 저장</button>
-          <button class="record-delete" type="button" id="recordDelete" hidden>제출 삭제</button>
+          <button class="record-delete" type="button" id="recordDelete" hidden>질문 제출 삭제</button>
         </div>
+        <p class="form-status" id="recordStatus" role="status" aria-live="polite"></p>
       </form>
     </article>
   </div>
@@ -2072,8 +2111,8 @@ function renderChoices() {
     const img = photo(m) || "/assets/profile-placeholder.png";
     const removeButton = selectionLocked ? "" :
       `<button class="choice-remove" data-remove="${m.mentorId}" aria-label="선택 취소">×</button>`;
-    const alias = m.alias && m.alias !== m.name ? m.alias : "";
-    return `<div class="choice filled" data-detail="${m.mentorId}"><img class="choice-photo" src="${img}" alt="${esc(m.name||m.alias)} 프로필">${removeButton}<b>${ranks[i]}</b><strong>${esc(m.name||m.alias)}</strong><small>${esc(alias||m.companyName||m.job||"")}</small></div>`
+    const alias = m.alias && m.alias !== m.name ? `활동명 · ${m.alias}` : "";
+    return `<div class="choice filled" data-detail="${m.mentorId}"><img class="choice-photo" src="${img}" alt="${esc(m.name||"멘토")} 프로필">${removeButton}<b>${ranks[i]}</b><strong>${esc(m.name||"멘토")}</strong><small>${esc(alias)}</small></div>`
   }).join("");
   const selectedCount = state.selected.filter(Boolean).length;
   $("#selectedCount").textContent = selectedCount;
@@ -2341,8 +2380,12 @@ function applyRecord(record) {
   state.recordDrink = record.drink || "NOMATTER";
   state.selected = [record.firstMentorId, record.secondMentorId, record.thirdMentorId]
     .map(value => Number(value) || null);
+  const questionFields = ["firstQuestion", "secondQuestion", "thirdQuestion"];
+  const hasServerQuestions = questionFields.every(field => Object.prototype.hasOwnProperty.call(record, field));
   const draft = storedRecordDetails();
-  if (draft?.mentorIds?.every((id, index) => Number(id) === state.selected[index])) {
+  if (hasServerQuestions) {
+    state.recordQuestions = questionFields.map(field => String(record[field] || ""))
+  } else if (draft?.mentorIds?.every((id, index) => Number(id) === state.selected[index])) {
     state.recordQuestions = [0, 1, 2].map(index => String(draft.questions?.[index] || ""))
   } else {
     state.recordQuestions = ["", "", ""]
@@ -2434,7 +2477,7 @@ async function submitFinalRecord(event) {
     status.textContent = "제출이 완료되었습니다.";
     $("#finalConfirmModal").classList.remove("open");
     render();
-    toast(wasUpdate ? "변경한 지망을 최종 제출했습니다." : "지망을 최종 제출했습니다. 이제 음료와 질문을 입력할 수 있어요.")
+    toast(wasUpdate ? "변경한 지망을 최종 제출했습니다." : "지망을 최종 제출했습니다. 이제 질문을 입력할 수 있어요.")
   } catch (error) {
     const message = error.message || "지망을 최종 제출하지 못했습니다.";
     status.classList.add("error");
@@ -2464,7 +2507,7 @@ function openRecordForm() {
   state.selected.forEach((id, index) => {
     const selectedMentor = mentor(id);
     document.getElementById(["firstQuestionLabel", "secondQuestionLabel", "thirdQuestionLabel"][index])
-      .textContent = `${ranks[index]} · ${selectedMentor?.name || selectedMentor?.alias || "멘토"}에게 할 질문`
+      .textContent = `${ranks[index]} · ${selectedMentor?.name || "멘토"} 멘토님께 전달할 질문`
   });
   $("#recordSummary").innerHTML = recordSummaryMarkup();
   ["firstQuestion", "secondQuestion", "thirdQuestion"].forEach((name, index) => {
@@ -2472,6 +2515,8 @@ function openRecordForm() {
   });
   $("#recordTitle").textContent = "질문 입력";
   $("#recordSave").textContent = "질문 저장";
+  $("#recordStatus").textContent = "";
+  $("#recordStatus").classList.remove("error");
   $("#recordDelete").hidden = false;
   $("#recordModal").classList.add("open")
 }
@@ -2491,10 +2536,13 @@ async function saveRecord(event) {
     thirdQuestion: questions[2],
     drink: state.recordDrink || "NOMATTER"
   };
-  const saveButton = $("#recordSave");
+  const saveButton = $("#recordSave"),
+    status = $("#recordStatus");
   try {
     saveButton.disabled = true;
     saveButton.textContent = "저장 중…";
+    status.classList.remove("error");
+    status.textContent = "질문을 저장하고 있습니다.";
     const saved = await api("/record", {
       method: "PATCH",
       body: JSON.stringify(payload)
@@ -2503,33 +2551,43 @@ async function saveRecord(event) {
     state.recordDrink = payload.drink;
     state.recordQuestions = questions;
     saveRecordDetails();
-    $("#recordModal").classList.remove("open");
     render();
-    toast("질문을 저장했습니다.")
+    status.textContent = "질문이 성공적으로 저장되었습니다.";
+    toast("질문이 성공적으로 저장되었습니다.")
   } catch (error) {
-    toast(error.message || "지망을 저장하지 못했습니다.")
+    const message = error.message || "질문을 저장하지 못했습니다.";
+    status.classList.add("error");
+    status.textContent = message;
+    toast(message)
   } finally {
     saveButton.disabled = false;
     saveButton.textContent = "질문 저장"
   }
 }
 
-async function deleteRecord() {
+async function deleteQuestions() {
+  const deleteButton = $("#recordDelete"),
+    status = $("#recordStatus");
   try {
-    await api("/record", {method: "DELETE"});
-    state.recordExists = false;
-    state.recordDirty = false;
-    state.recordDrink = "NOMATTER";
+    deleteButton.disabled = true;
+    deleteButton.textContent = "삭제 중…";
+    status.classList.remove("error");
+    status.textContent = "제출한 질문을 삭제하고 있습니다.";
+    await api("/record/questions", {method: "DELETE"});
     state.recordQuestions = ["", "", ""];
-    localStorage.removeItem(recordDraftKey());
-    state.selected = [null, null, null];
-    saveOrder();
-    $("#recordModal").classList.remove("open");
+    saveRecordDetails();
     $("#recordForm").reset();
     render();
-    toast("제출한 지망을 삭제했습니다.")
+    status.textContent = "제출한 질문을 삭제했습니다. 지망 선택은 유지됩니다.";
+    toast("질문 제출을 삭제했습니다. 지망 선택은 유지됩니다.")
   } catch (error) {
-    toast(error.message || "지망을 삭제하지 못했습니다.")
+    const message = error.message || "질문을 삭제하지 못했습니다.";
+    status.classList.add("error");
+    status.textContent = message;
+    toast(message)
+  } finally {
+    deleteButton.disabled = false;
+    deleteButton.textContent = "질문 제출 삭제"
   }
 }
 
@@ -2722,7 +2780,7 @@ $("#recordOpen").addEventListener("click", openFinalConfirm);
 $("#finalForm").addEventListener("submit", submitFinalRecord);
 $("#recordDetailsOpen").addEventListener("click", openRecordForm);
 $("#recordForm").addEventListener("submit", saveRecord);
-$("#recordDelete").addEventListener("click", deleteRecord);
+$("#recordDelete").addEventListener("click", deleteQuestions);
 $$(".modal").forEach(m => m.addEventListener("click", e => {
   if (e.target === m) m.classList.remove("open")
 }));

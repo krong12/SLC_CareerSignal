@@ -48,4 +48,12 @@ public class RecordController {
         recordService.deleteRecord(userInfo.getUserId());
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/record/questions")
+    public ResponseEntity<Void> deleteQuestions(
+            @SessionAttribute(name = "LOGIN_USER", required = false) UserPostResponse userInfo) {
+        if(userInfo == null) throw new CustomException(ExceptionCode.NOT_LOGINED);
+        recordService.deleteQuestions(userInfo.getUserId());
+        return ResponseEntity.noContent().build();
+    }
 }

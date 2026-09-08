@@ -26,6 +26,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(RecordController.class)
@@ -58,7 +59,11 @@ public class RecordControllerTest {
         );
 
         recordPostResponse = new RecordPostResponse(
-                1L, 1L, 2L, 3L, Drink.ICETEA, LocalDateTime.now()
+                1L,
+                1L, "1지망 멘토에 대한 질문",
+                2L, "2지망 멘토에 대한 질문",
+                3L, "3지망 멘토에 대한 질문",
+                Drink.ICETEA, LocalDateTime.now()
         );
     }
 
@@ -74,12 +79,24 @@ public class RecordControllerTest {
                         responseFields(
                                 fieldWithPath("recordId").description("레코드 ID"),
                                 fieldWithPath("firstMentorId").description("1지망 멘토 ID"),
+                                fieldWithPath("firstQuestion").description("1지망 멘토에게 제출한 질문"),
                                 fieldWithPath("secondMentorId").description("2지망 멘토 ID"),
+                                fieldWithPath("secondQuestion").description("2지망 멘토에게 제출한 질문"),
                                 fieldWithPath("thirdMentorId").description("3지망 멘토 ID"),
+                                fieldWithPath("thirdQuestion").description("3지망 멘토에게 제출한 질문"),
                                 fieldWithPath("drink").description("선택한 음료"),
                                 fieldWithPath("priorityAt").description("작성/우선순위 시간")
                         )
                 ));
+    }
+
+    @Test
+    @DisplayName("레코드 조회 - 로그인하지 않은 경우 401 반환")
+    void showRecordsWithoutLogin() throws Exception {
+        mockMvc.perform(get("/record"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value("NOT_LOGINED"))
+                .andExpect(jsonPath("$.message").value("로그인되지 않았습니다."));
     }
 
     @Test
@@ -105,8 +122,11 @@ public class RecordControllerTest {
                         responseFields(
                                 fieldWithPath("recordId").description("레코드 ID"),
                                 fieldWithPath("firstMentorId").description("1지망 멘토 ID"),
+                                fieldWithPath("firstQuestion").description("1지망 멘토에게 제출한 질문"),
                                 fieldWithPath("secondMentorId").description("2지망 멘토 ID"),
+                                fieldWithPath("secondQuestion").description("2지망 멘토에게 제출한 질문"),
                                 fieldWithPath("thirdMentorId").description("3지망 멘토 ID"),
+                                fieldWithPath("thirdQuestion").description("3지망 멘토에게 제출한 질문"),
                                 fieldWithPath("drink").description("선택한 음료"),
                                 fieldWithPath("priorityAt").description("작성/우선순위 시간")
                         )
@@ -136,8 +156,11 @@ public class RecordControllerTest {
                         responseFields(
                                 fieldWithPath("recordId").description("레코드 ID"),
                                 fieldWithPath("firstMentorId").description("1지망 멘토 ID"),
+                                fieldWithPath("firstQuestion").description("1지망 멘토에게 제출한 질문"),
                                 fieldWithPath("secondMentorId").description("2지망 멘토 ID"),
+                                fieldWithPath("secondQuestion").description("2지망 멘토에게 제출한 질문"),
                                 fieldWithPath("thirdMentorId").description("3지망 멘토 ID"),
+                                fieldWithPath("thirdQuestion").description("3지망 멘토에게 제출한 질문"),
                                 fieldWithPath("drink").description("선택한 음료"),
                                 fieldWithPath("priorityAt").description("작성/우선순위 시간")
                         )
@@ -153,5 +176,16 @@ public class RecordControllerTest {
                         .session(userSession))
                 .andExpect(status().isNoContent())
                 .andDo(document("record-delete"));
+    }
+
+    @Test
+    @DisplayName("질문만 삭제 - 성공")
+    void deleteQuestions() throws Exception {
+        doNothing().when(recordService).deleteQuestions(5L);
+
+        mockMvc.perform(delete("/record/questions")
+                        .session(userSession))
+                .andExpect(status().isNoContent())
+                .andDo(document("record-question-delete"));
     }
 }
