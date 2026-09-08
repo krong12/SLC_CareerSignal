@@ -104,7 +104,8 @@ public class RecordService {
 
         Record record = recordRepository.findByUser_UserId(userId)
                 .orElseThrow(() -> new CustomException(ExceptionCode.NOT_FOUND_RECORD));
-        record.update(user, firstMentor, secondMentor, thirdMentor, request.getDrink(), LocalDateTime.now());
+        record.update(user, firstMentor, secondMentor, thirdMentor,
+                request.getDrink() == null ? Drink.NOMATTER : request.getDrink(), LocalDateTime.now());
 
         clearQuestions(userId);
         saveQuestion(user, firstMentor, request.getFirstQuestion());
