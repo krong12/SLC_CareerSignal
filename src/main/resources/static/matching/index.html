@@ -966,6 +966,20 @@ main {
   cursor: not-allowed;
 }
 
+/* 제출 완료 뒤 같은 자리는 전체 제출 삭제 동작으로 전환됩니다. */
+.record-submit.delete-mode,
+.record-submit.delete-mode:disabled {
+  border-color: #bd8795;
+  color: var(--white);
+  background: #74263b;
+  box-shadow: 0 7px 16px rgba(87, 19, 38, .28);
+  cursor: pointer;
+}
+
+.record-submit.delete-mode:hover {
+  background: #571326;
+}
+
 .record-detail-button {
   color: var(--white);
   background: var(--blue-dark);
@@ -1060,14 +1074,15 @@ main {
   flex: 1;
 }
 
-/* 질문 팝업은 저장보다 삭제 동작의 의미가 명확히 보이도록 세 버튼의 폭을 나눕니다. */
+/* 질문 저장을 주 동작으로 강조하고 삭제 버튼과 약 8:2 비율로 배치합니다. */
 #recordSave {
-  flex: 0 1 28%;
-  min-width: 104px;
+  flex: 4 1 0;
+  min-width: 0;
 }
 
 #recordDelete {
-  flex: 1 1 32%;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
 .submission-warning {
@@ -1134,31 +1149,15 @@ main {
 .record-delete {
   border: 1px solid #cbd2d9;
   border-radius: 999px;
-  padding: 13px 19px;
+  padding: 13px 10px;
   color: #9a4444;
   background: var(--white);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
-.final-record-delete {
-  flex: 1 1 40%;
-  border: 1px solid #571326;
-  border-radius: 999px;
-  padding: 13px 19px;
-  color: var(--white);
-  background: #74263b;
-  box-shadow: 0 8px 18px rgba(87, 19, 38, .24);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.final-record-delete:hover {
-  background: #571326;
-}
-
-.record-delete:disabled,
-.final-record-delete:disabled {
+.record-delete:disabled {
   cursor: wait;
   opacity: .62;
 }
@@ -1213,6 +1212,20 @@ main {
   color: var(--blue-dark);
   background: rgba(255, 255, 255, .8);
   font-size: 11px;
+}
+
+/* 하트, 문구, 찜 개수를 한 줄의 정중앙에 맞춥니다. */
+.saved-filter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.saved-filter span {
+  margin-left: 0;
+  line-height: 20px;
 }
 
 .structured-filters {
@@ -1673,16 +1686,44 @@ main {
 
 @media(max-width:700px) {
   .structured-filters {
-    order: 2;
-    max-width: calc(100vw - 125px);
-    overflow-x: auto;
-    padding-bottom: 3px;
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .filter-group {
+    min-width: 0;
+  }
+
+  .filter-group[open] {
+    grid-column: 1 / -1;
+  }
+
+  .filter-group summary {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+  }
+
+  .filter-options {
+    position: static;
+    width: 100%;
+    max-height: 45dvh;
+    margin-top: 8px;
   }
 
   .filter-reset,
   .saved-filter {
     height: 42px;
     padding: 0 11px;
+  }
+
+  .saved-filter {
+    order: 2;
   }
 
   .search {
@@ -1733,7 +1774,29 @@ main {
   .choice {
     width: 100%;
     height: auto;
+    min-height: 72px;
+    aspect-ratio: auto;
     margin-left: 0;
+    padding: 5px 24px 5px 8px;
+  }
+
+  .choice.filled b,
+  .choice.filled strong,
+  .choice.filled small {
+    max-width: 100%;
+    line-height: 1.15;
+  }
+
+  .choice.filled b {
+    font-size: 10px;
+  }
+
+  .choice.filled strong {
+    font-size: 12px;
+  }
+
+  .choice.filled small {
+    font-size: 9px;
   }
 
   .hero h1 {
@@ -1836,8 +1899,7 @@ main {
   }
 
   #recordSave,
-  #recordDelete,
-  #finalRecordDelete {
+  #recordDelete {
     width: 100%;
     min-width: 0;
     flex: none;
@@ -2032,7 +2094,6 @@ main {
         <div class="record-actions">
           <button class="primary" type="submit" id="recordSave">질문 저장</button>
           <button class="record-delete" type="button" id="recordDelete" hidden>질문 제출 삭제</button>
-          <button class="final-record-delete" type="button" id="finalRecordDelete" hidden>최종 제출 삭제</button>
         </div>
         <p class="form-status" id="recordStatus" role="status" aria-live="polite"></p>
       </form>
@@ -2157,11 +2218,15 @@ function renderChoices() {
     return `<div class="choice filled" data-detail="${m.mentorId}"><img class="choice-photo" src="${img}" alt="${esc(m.name||"멘토")} 프로필">${removeButton}<b>${ranks[i]}</b><strong>${esc(m.name||"멘토")}</strong><small>${esc(alias)}</small></div>`
   }).join("");
   const selectedCount = state.selected.filter(Boolean).length;
+  const finalSubmitted = state.recordExists && !state.recordDirty;
+  const recordButton = $("#recordOpen");
   $("#selectedCount").textContent = selectedCount;
-  $("#recordOpen").disabled = selectedCount !== 3 || (state.recordExists && !state.recordDirty);
-  $("#recordOpen").textContent = selectedCount !== 3 ? "최종 제출" :
-    (state.recordExists && !state.recordDirty ? "제출 완료" :
+  recordButton.disabled = selectedCount !== 3;
+  recordButton.classList.toggle("delete-mode", finalSubmitted);
+  recordButton.textContent = selectedCount !== 3 ? "최종 제출" :
+    (finalSubmitted ? "최종 제출 삭제" :
       (state.recordExists ? "변경한 지망 제출" : "최종 제출"));
+  recordButton.setAttribute("aria-label", finalSubmitted ? "최종 제출 삭제" : "지망 최종 제출");
   $("#recordDetailsOpen").hidden = !state.recordExists || state.recordDirty
 }
 
@@ -2246,7 +2311,7 @@ async function openDetail(id) {
   const selectionLocked = state.recordExists && !state.recordDirty;
   const alias = m.alias && m.alias !== m.name ? m.alias : "";
   $("#detailContent").innerHTML =
-    `<div class="business-card"><div class="profile-photo" style="background-image:url('${profileImage}')" role="img" aria-label="${esc(m.name||m.alias)} 프로필 이미지"></div><div class="profile-info"><div class="eyebrow">Mentor profile</div><h2>${esc(m.name||m.alias)}</h2>${alias?`<p class="mentor-alias">활동명 · ${esc(alias)}</p>`:""}<div class="labeled-tags">${tags.filter(([,value])=>value).map(([label,value])=>`<span class="labeled-tag"><b>${label}</b># ${esc(value)}</span>`).join("")}</div><div class="profile-sections"><section class="profile-section bio"><h3>약력</h3><p>${esc(m.introduce||"등록된 약력이 없습니다.")}</p></section><section class="profile-section quote"><h3>멘토의 한 마디</h3><p>${esc(m.oneLine||"등록된 한 마디가 없습니다.")}</p></section></div><p class="select-title">${selectionLocked?"최종 제출된 지망은 변경할 수 없습니다.":"희망 순위를 선택해 주세요"}</p><div class="rank-actions">${[0,1,2].map(i=>`<button class="rank-action ${current===i?"selected":""}" data-rank="${i}" data-mentor="${m.mentorId}" ${selectionLocked?"disabled":""}>${current===i?`${ranks[i]} 선택됨`:`${ranks[i]}으로 선택`}</button>`).join("")}</div></div></div>`;
+    `<div class="business-card"><div class="profile-photo" style="background-image:url('${profileImage}')" role="img" aria-label="${esc(m.name||m.alias)} 프로필 이미지"></div><div class="profile-info"><div class="eyebrow">Mentor profile</div><h2>${esc(m.name||m.alias)}</h2>${alias?`<p class="mentor-alias">활동명 · ${esc(alias)}</p>`:""}<div class="labeled-tags">${tags.filter(([,value])=>value).map(([label,value])=>`<span class="labeled-tag"><b>${label}</b># ${esc(value)}</span>`).join("")}</div><div class="profile-sections"><section class="profile-section bio"><h3>약력</h3><p>${esc(m.introduce||"등록된 약력이 없습니다.")}</p></section><section class="profile-section quote"><h3>멘토의 한 마디</h3><p>${esc(m.oneLine||"등록된 한 마디가 없습니다.")}</p></section></div><p class="select-title">${selectionLocked?"지망을 다시 선택하려면 상단의 ‘최종 제출 삭제’를 먼저 눌러 주세요.":"희망 순위를 선택해 주세요"}</p><div class="rank-actions">${[0,1,2].map(i=>`<button class="rank-action ${current===i?"selected":""}" data-rank="${i}" data-mentor="${m.mentorId}" ${selectionLocked?"disabled":""}>${current===i?`${ranks[i]} 선택됨`:`${ranks[i]}으로 선택`}</button>`).join("")}</div></div></div>`;
   $("#detailModal").classList.add("open")
 }
 
@@ -2260,7 +2325,7 @@ function requireLogin() {
 function choose(id, rank) {
   if (!requireLogin()) return;
   if (state.recordExists && !state.recordDirty) {
-    toast("최종 제출한 지망은 변경할 수 없습니다.");
+    toast("지망을 다시 선택하려면 상단의 ‘최종 제출 삭제’를 먼저 눌러 주세요.");
     return
   }
   id = Number(id);
@@ -2283,7 +2348,7 @@ function choose(id, rank) {
 function remove(id) {
   if (!requireLogin()) return;
   if (state.recordExists && !state.recordDirty) {
-    toast("최종 제출한 지망은 변경할 수 없습니다.");
+    toast("지망을 다시 선택하려면 상단의 ‘최종 제출 삭제’를 먼저 눌러 주세요.");
     return
   }
   id = Number(id);
@@ -2560,7 +2625,6 @@ function openRecordForm() {
   $("#recordStatus").textContent = "";
   $("#recordStatus").classList.remove("error");
   $("#recordDelete").hidden = false;
-  $("#finalRecordDelete").hidden = false;
   $("#recordModal").classList.add("open")
 }
 
@@ -2637,18 +2701,16 @@ async function deleteQuestions() {
 // 최종 제출 삭제는 서버의 매칭 기록 전체를 지운 뒤, 화면도 제출 전 상태로 되돌립니다.
 // 서버에서 새 기록을 만들 때 priorityAt을 현재 시각으로 기록하므로 재제출 시각도 새로 생성됩니다.
 async function deleteFinalRecord() {
+  if (!requireLogin()) return;
   const confirmed = window.confirm(
     "최종 제출을 삭제하면 선택한 1·2·3지망과 음료, 제출한 질문이 모두 삭제됩니다. 다시 선택하시겠습니까?"
   );
   if (!confirmed) return;
 
-  const deleteButton = $("#finalRecordDelete"),
-    status = $("#recordStatus");
+  const deleteButton = $("#recordOpen");
   try {
     deleteButton.disabled = true;
     deleteButton.textContent = "삭제 중…";
-    status.classList.remove("error");
-    status.textContent = "최종 제출 내역을 삭제하고 있습니다.";
 
     await api("/record", {method: "DELETE"});
 
@@ -2669,12 +2731,10 @@ async function deleteFinalRecord() {
     toast("최종 제출을 삭제했습니다. 지망과 음료를 다시 선택해 주세요.")
   } catch (error) {
     const message = error.message || "최종 제출을 삭제하지 못했습니다.";
-    status.classList.add("error");
-    status.textContent = message;
     toast(message)
   } finally {
     deleteButton.disabled = false;
-    deleteButton.textContent = "최종 제출 삭제"
+    renderChoices()
   }
 }
 
@@ -2863,12 +2923,14 @@ $("#savedFilter").addEventListener("click", () => {
   state.showSavedOnly = !state.showSavedOnly;
   renderMentors()
 });
-$("#recordOpen").addEventListener("click", openFinalConfirm);
+$("#recordOpen").addEventListener("click", () => {
+  if (state.recordExists && !state.recordDirty) deleteFinalRecord();
+  else openFinalConfirm()
+});
 $("#finalForm").addEventListener("submit", submitFinalRecord);
 $("#recordDetailsOpen").addEventListener("click", openRecordForm);
 $("#recordForm").addEventListener("submit", saveRecord);
 $("#recordDelete").addEventListener("click", deleteQuestions);
-$("#finalRecordDelete").addEventListener("click", deleteFinalRecord);
 $$(".modal").forEach(m => m.addEventListener("click", e => {
   if (e.target === m) m.classList.remove("open")
 }));
