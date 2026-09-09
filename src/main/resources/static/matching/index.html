@@ -1060,6 +1060,16 @@ main {
   flex: 1;
 }
 
+/* 질문 팝업은 저장보다 삭제 동작의 의미가 명확히 보이도록 세 버튼의 폭을 나눕니다. */
+#recordSave {
+  flex: 0 1 28%;
+  min-width: 104px;
+}
+
+#recordDelete {
+  flex: 1 1 32%;
+}
+
 .submission-warning {
   margin: 16px 0 0;
   border: 1px solid #d8c7ad;
@@ -1128,6 +1138,29 @@ main {
   color: #9a4444;
   background: var(--white);
   font-size: 14px;
+  font-weight: 700;
+}
+
+.final-record-delete {
+  flex: 1 1 40%;
+  border: 1px solid #571326;
+  border-radius: 999px;
+  padding: 13px 19px;
+  color: var(--white);
+  background: #74263b;
+  box-shadow: 0 8px 18px rgba(87, 19, 38, .24);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.final-record-delete:hover {
+  background: #571326;
+}
+
+.record-delete:disabled,
+.final-record-delete:disabled {
+  cursor: wait;
+  opacity: .62;
 }
 
 main {
@@ -1801,6 +1834,14 @@ main {
   .record-actions {
     flex-direction: column;
   }
+
+  #recordSave,
+  #recordDelete,
+  #finalRecordDelete {
+    width: 100%;
+    min-width: 0;
+    flex: none;
+  }
 }
 
 @media(max-width:600px) {
@@ -1959,7 +2000,7 @@ main {
             <option value="WATER">물</option>
             <option value="AMERICANO">아메리카노</option>
             <option value="ICETEA">아이스티</option>
-            <option value="TEA">차</option>
+            <option value="TEA">차(캐모마일)</option>
           </select>
         </label>
         <p class="submission-warning" role="alert">최종 제출 후에는 지망과 음료를 수정할 수 없습니다.</p>
@@ -1991,6 +2032,7 @@ main {
         <div class="record-actions">
           <button class="primary" type="submit" id="recordSave">질문 저장</button>
           <button class="record-delete" type="button" id="recordDelete" hidden>질문 제출 삭제</button>
+          <button class="final-record-delete" type="button" id="finalRecordDelete" hidden>최종 제출 삭제</button>
         </div>
         <p class="form-status" id="recordStatus" role="status" aria-live="polite"></p>
       </form>
@@ -2518,6 +2560,7 @@ function openRecordForm() {
   $("#recordStatus").textContent = "";
   $("#recordStatus").classList.remove("error");
   $("#recordDelete").hidden = false;
+  $("#finalRecordDelete").hidden = false;
   $("#recordModal").classList.add("open")
 }
 
@@ -2588,6 +2631,50 @@ async function deleteQuestions() {
   } finally {
     deleteButton.disabled = false;
     deleteButton.textContent = "질문 제출 삭제"
+  }
+}
+
+// 최종 제출 삭제는 서버의 매칭 기록 전체를 지운 뒤, 화면도 제출 전 상태로 되돌립니다.
+// 서버에서 새 기록을 만들 때 priorityAt을 현재 시각으로 기록하므로 재제출 시각도 새로 생성됩니다.
+async function deleteFinalRecord() {
+  const confirmed = window.confirm(
+    "최종 제출을 삭제하면 선택한 1·2·3지망과 음료, 제출한 질문이 모두 삭제됩니다. 다시 선택하시겠습니까?"
+  );
+  if (!confirmed) return;
+
+  const deleteButton = $("#finalRecordDelete"),
+    status = $("#recordStatus");
+  try {
+    deleteButton.disabled = true;
+    deleteButton.textContent = "삭제 중…";
+    status.classList.remove("error");
+    status.textContent = "최종 제출 내역을 삭제하고 있습니다.";
+
+    await api("/record", {method: "DELETE"});
+
+    state.recordExists = false;
+    state.recordDirty = false;
+    state.selected = [null, null, null];
+    state.recordDrink = "NOMATTER";
+    state.recordQuestions = ["", "", ""];
+    saveOrder();
+    try {
+      localStorage.removeItem(recordDraftKey())
+    } catch (_) {}
+
+    $("#recordForm").reset();
+    $("#finalForm").reset();
+    $("#recordModal").classList.remove("open");
+    render();
+    toast("최종 제출을 삭제했습니다. 지망과 음료를 다시 선택해 주세요.")
+  } catch (error) {
+    const message = error.message || "최종 제출을 삭제하지 못했습니다.";
+    status.classList.add("error");
+    status.textContent = message;
+    toast(message)
+  } finally {
+    deleteButton.disabled = false;
+    deleteButton.textContent = "최종 제출 삭제"
   }
 }
 
@@ -2781,6 +2868,7 @@ $("#finalForm").addEventListener("submit", submitFinalRecord);
 $("#recordDetailsOpen").addEventListener("click", openRecordForm);
 $("#recordForm").addEventListener("submit", saveRecord);
 $("#recordDelete").addEventListener("click", deleteQuestions);
+$("#finalRecordDelete").addEventListener("click", deleteFinalRecord);
 $$(".modal").forEach(m => m.addEventListener("click", e => {
   if (e.target === m) m.classList.remove("open")
 }));
